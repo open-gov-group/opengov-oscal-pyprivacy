@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling>=1.18"]
+build-backend = "hatchling.build"
+
+[project]
+name = "opengov-oscal-pycore"
+version = "0.1.0"
+description = "Lightweight core utilities for working with NIST OSCAL in Python."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [
+  { name = "OpenGov / opengov-privacy", email = "developers@open-gov.group" }
+]
+dependencies = [
+  "oscal-pydantic>=0.6.0",      # Version nur beispielhaft
+  "jsonschema>=4.0.0"           # für Validation (später)
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0.0",
+  "ruff",
+  "mypy",
+]
+
+[project.urls]
+Homepage = "https://github.com/opengov/opengov-oscal-pyprivacy"
+Issues = "https://github.com/opengov/opengov-oscal-pyprivacy/issues"
