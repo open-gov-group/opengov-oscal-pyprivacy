@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Generic, TypeVar, Type
 
-import json
 from pydantic import BaseModel
 
 T = TypeVar("T", bound=BaseModel)
@@ -19,7 +19,6 @@ class OscalRepository(Generic[T]):
         # ... Änderungen ...
         repo.save("catalogs/privacy.json", catalog)
     """
-
     def __init__(self, base_path: Path):
         self.base_path = base_path
 
@@ -30,13 +29,14 @@ class OscalRepository(Generic[T]):
         full_path = self.resolve(rel_path)
         with full_path.open("r", encoding="utf-8") as f:
             data = json.load(f)
-        return model.parse_obj(data)
+        return model.model_validate(data)
 
     def save(self, rel_path: str | Path, obj: T) -> None:
         full_path = self.resolve(rel_path)
         full_path.parent.mkdir(parents=True, exist_ok=True)
+        text = obj.model_dump_json(by_alias=True, exclude_none=True, indent=2)
+        full_path.write_text(text, encoding="utf-8")
 
-        # obj.json() liefert bereits korrektes OSCAL-JSON (by_alias etc.), je nach oscal-pydantic-Version ggf. anpassen
-        text = obj.json(by_alias=True, exclude_none=True, indent=2, ensure_ascii=False)
-        with full_path.open("w", encoding="utf-8") as f:
-            f.write(text)
+
+
+

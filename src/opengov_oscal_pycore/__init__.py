@@ -1,25 +1,18 @@
 """
 opengov_oscal_pycore
 
-Schlanker Kern für Arbeit mit NIST OSCAL in Python.
-Baut auf oscal-pydantic auf und bietet:
-- Modell-Reexports
-- Repository-Funktionen (Datei-Handling)
-- Utilities für Props/Parts
-- Katalog-spezifische CRUD-Helfer
-- einfache Versionierungs-Utilities
+Lightweight, tool-agnostic core utilities for working with OSCAL-like JSON
+structures in Python.
+
+Scope (intentionally small):
+- Minimal subset models (Pydantic v2) with round-trip safety
+- File-based repository IO (load/save)
+- Utilities for props (and later parts/prose)
+- Catalog-focused CRUD helpers
+- Simple versioning helpers
 """
 
-from opengov_oscal_pycore.models import (
-    Catalog,
-    Profile,
-    ComponentDefinition,
-    SystemSecurityPlan,
-)
+from .models import Catalog, Group, Control, Property
+from .repo import OscalRepository
 
-__all__ = [
-    "Catalog",
-    "Profile",
-    "ComponentDefinition",
-    "SystemSecurityPlan",
-]
+__all__ = ["Catalog", "Group", "Control", "Property", "OscalRepository"]

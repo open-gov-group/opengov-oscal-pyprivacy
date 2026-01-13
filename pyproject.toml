@@ -3,27 +3,50 @@ requires = ["hatchling>=1.18"]
 build-backend = "hatchling.build"
 
 [project]
-name = "opengov-oscal-pycore"
+name = "opengov-oscal-pyprivacy"
 version = "0.1.0"
-description = "Lightweight core utilities for working with NIST OSCAL in Python."
+description = "OSCAL privacy utilities (core CRUD + privacy/SDM helpers) for OpenGov tooling."
 readme = "README.md"
 requires-python = ">=3.10"
-license = { text = "Apache-2.0" }
+license = { text = "GPL-3.0-only" }
 authors = [
-  { name = "OpenGov / opengov-privacy", email = "developers@open-gov.group" }
+  { name = "OpenGov", email = "developers@open-gov.group" }
 ]
 dependencies = [
-  "oscal-pydantic>=0.6.0",      # Version nur beispielhaft
-  "jsonschema>=4.0.0"           # für Validation (später)
+  "pydantic>=2.12.0",
+  "opengov-pylegal-utils>=0.1.0",
 ]
 
 [project.optional-dependencies]
 dev = [
-  "pytest>=8.0.0",
+  "pytest>=8.0",
   "ruff",
   "mypy",
 ]
 
 [project.urls]
-Homepage = "https://github.com/opengov/opengov-oscal-pyprivacy"
-Issues = "https://github.com/opengov/opengov-oscal-pyprivacy/issues"
+Homepage = "https://github.com/open-gov-group/opengov-oscal-pyprivacy"
+Issues = "https://github.com/open-gov-group/opengov-oscal-pyprivacy/issues"
+
+[tool.hatch.build.targets.wheel]
+# src-layout: point directly to package directories
+packages = [
+  "src/opengov_oscal_pycore",
+  "src/opengov_oscal_pyprivacy",
+]
+# Ensure CSV vocabs are included in the wheel installation
+include = [
+  "src/opengov_oscal_pyprivacy/data/*.csv",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["src/tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_unused_configs = true
