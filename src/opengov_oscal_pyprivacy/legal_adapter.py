@@ -105,3 +105,16 @@ def normalize_legal_from_text(
         added.append(str(identity))
 
     return added
+
+
+def add_or_update_legal(
+    control: Control,
+    norm_id: str | NormIdentity,
+    *,
+    human_label: Optional[str] = None,
+    spec: LegalPropSpec = LegalPropSpec(),
+) -> None:
+    """
+    Backwards-compatible alias for add_legal_id().
+    """
+    add_legal_id(control, norm_id, label=human_label, spec=spec)
