@@ -1,0 +1,3 @@
+container_name,canonical_item_name,accepted_item_names,id_prefix,description,ui_label_de,ui_label_en
+typical-measures,typical-measure,typical-measure|measure,tm,Typical measures,Typische Maßnahmen,Typical measures
+assessment-questions,assessment-question,assessment-question|question,aq,Assessment questions,Prüffragen,Assessment questions

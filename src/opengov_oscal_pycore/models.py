@@ -33,12 +33,14 @@ class Property(OscalBaseModel):
 
 class Control(OscalBaseModel):
     id: str
+    class_: Optional[str] = Field(default=None, alias="class")
     title: Optional[str] = None
     props: List[Property] = Field(default_factory=list)
 
 
 class Group(OscalBaseModel):
     id: str
+    class_: Optional[str] = Field(default=None, alias="class")
     title: Optional[str] = None
     controls: List[Control] = Field(default_factory=list)
 
