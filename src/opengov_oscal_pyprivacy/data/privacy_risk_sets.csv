@@ -1,0 +1,2 @@
+container_name,item_name,impact_prop_name,allowed_levels,item_class,impact_prop_class,data_category_prop_name,data_category_prop_class
+risk-guidance,risk-impact-scenario,impact-level,normal|moderate|high,dp-risk-impact,dp-risk,data-category-example,dp-data-category

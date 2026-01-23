@@ -1,5 +1,9 @@
 from .legal_adapter import LegalPropSpec, add_legal_id, add_or_update_legal, normalize_legal_from_text
 from .domain.privacy_control import (
+    get_risk_impact_scenarios,
+    upsert_risk_impact_scenario,
+    delete_risk_impact_scenario,
+
     list_typical_measures,
     add_typical_measure,
     update_typical_measure,
@@ -39,4 +43,9 @@ __all__ = [
     # props field-sets
     "list_dp_goals",
     "replace_dp_goals",
+    # risk guidance
+    "get_risk_impact_scenarios",
+    "upsert_risk_impact_scenario",
+    "delete_risk_impact_scenario",
 ]
+
