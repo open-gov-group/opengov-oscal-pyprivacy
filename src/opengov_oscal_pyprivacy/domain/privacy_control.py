@@ -18,6 +18,12 @@ from opengov_oscal_pycore.crud.props import find_props, remove_props, upsert_pro
 
 from .. import catalog_keys as K
 
+from .risk_guidance import (
+    get_risk_impact_scenarios,
+    upsert_risk_impact_scenario,
+    delete_risk_impact_scenario,
+)
+
 
 @dataclass(frozen=True)
 class PartSet:
