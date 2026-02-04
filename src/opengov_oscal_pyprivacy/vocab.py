@@ -40,7 +40,7 @@ class PrivacyVocabs:
     evidence_types: Vocab
     maturity_domains: Vocab
     maturity_levels: Vocab
-
+    mapping_schemes: Vocab
 
 def load_privacy_vocabs(data_dir: Path) -> PrivacyVocabs:
     return PrivacyVocabs(
@@ -49,6 +49,7 @@ def load_privacy_vocabs(data_dir: Path) -> PrivacyVocabs:
         evidence_types=load_vocab_csv(data_dir / "evidence_types.csv"),
         maturity_domains=load_vocab_csv(data_dir / "maturity_domains.csv"),
         maturity_levels=load_vocab_csv(data_dir / "maturity_levels.csv"),
+        mapping_schemes=load_vocab_csv(data_dir / "mapping_schemes.csv"),
     )
 
 from importlib.resources import files

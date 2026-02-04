@@ -2,10 +2,7 @@ from __future__ import annotations
 from typing import List, Optional
 from pydantic import BaseModel
 
-class RelatedMapping(BaseModel):
-    scheme: str
-    value: str
-    remarks: Optional[str] = None
+from .mapping import MappingRef as RelatedMapping
 
 class SdmControlSummaryProps(BaseModel):
     sdmModule: Optional[str] = None
