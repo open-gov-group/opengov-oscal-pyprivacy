@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.5.0] - 2026-02-12
+
+Phase 2: Converter-Layer — DTO-Factories, Naming-Standardisierung, Query-Helpers.
+
+### Added
+
+- Converter: `control_to_privacy_summary`, `control_to_privacy_detail`, `group_to_privacy_summary`, `group_to_privacy_detail` (#14)
+- Converter: `control_to_sdm_summary`, `control_to_sdm_detail` (#15)
+- Converter: `control_to_sdm_tom_summary`, `control_to_sdm_tom_detail`, `control_to_security_control` (#16)
+- Replaces 15+ manual extract calls per control with a single converter call
+- Query: `find_controls_by_prop`, `iter_controls_with_group` in `crud_catalog.py` (#18)
+- Query: `find_controls_by_tom_id`, `find_controls_by_implementation_level`, `find_controls_by_legal_article` in `domain/query.py` (#18)
+- Exports: `domain/__init__.py` exports all 55+ domain functions, `converters/__init__.py` exports all 9 converters (#17)
+
+### Changed
+
+- DTO naming: `DtoBaseModel` with `ConfigDict(populate_by_name=True)`, all fields snake_case with camelCase aliases (#11)
+- DTO naming: `dto/sdm.py` `groupId` -> `group_id`, `dto/mapping_workbench.py` `catalogId` -> `catalog_id`, etc. (#11)
+- Legacy cleanup: removed deprecated root-level `sdm_catalog.py` (`PrivacyCatalog` class) (#12)
+- Legacy cleanup: `DeprecationWarning` in `props_parts.py`, `crud_catalog.py` migrated to `crud.props` (#12)
+
+### Quality Gate (#20)
+
+- 220 tests, 97% coverage (up from 129 tests / 90%)
+- New test files: test_pycore_infrastructure, test_vocab, test_converters_*, test_query, test_integration_workflow, test_package_exports
+- Python 3.10-3.14 compatible
+
 ## [0.4.0] - 2026-02-12
 
 Phase 1: Fundament — vollstaendige Implementierung aller 10 Issues.

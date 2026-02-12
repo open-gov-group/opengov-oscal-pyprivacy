@@ -2,7 +2,7 @@
 
 Lightweight Python toolkit for OSCAL privacy catalogs and privacy/SDM-specific conventions.
 
-**Version:** 0.4.0 | **Python:** >=3.10 | **License:** GPL-3.0-only
+**Version:** 0.5.0 | **Python:** >=3.10 | **License:** GPL-3.0-only
 
 ## Packages
 
@@ -16,7 +16,7 @@ Minimal OSCAL subset models + generic CRUD utilities.
 | `crud/props.py` | Property CRUD: `list_props`, `find_props`, `get_prop`, `upsert_prop`, `remove_props` |
 | `crud/parts.py` | Part CRUD (Mixed-Mode: Part models + dicts): `parts_ref`, `find_part`, `ensure_part_container`, `add_child_part`, ... |
 | `crud/links.py` | Link CRUD: `list_links`, `find_links`, `get_link`, `upsert_link`, `remove_links` |
-| `crud_catalog.py` | Catalog-level CRUD: `find_control`, `add_control`, `delete_control`, `set_control_prop` |
+| `crud_catalog.py` | Catalog-level CRUD + query: `find_control`, `find_controls_by_prop`, `iter_controls_with_group` |
 | `repo.py` | File-based I/O: `OscalRepository[T]` with `load()` / `save()` |
 
 ### opengov_oscal_pyprivacy
@@ -32,6 +32,8 @@ Privacy/SDM helpers, domain modules, CSV-backed vocabularies, and DTOs.
 | `dto/` | Pydantic DTOs for API integration (Privacy, SDM, SDM-TOM, Resilience, Mapping) |
 | `vocab.py` | CSV-backed vocabulary loading (assurance goals, measures, maturity, ...) |
 | `legal_adapter.py` | Legal reference normalization (integrates with opengov-pylegal-utils) |
+| `domain/query.py` | Query helpers: `find_controls_by_tom_id`, `find_controls_by_legal_article` |
+| `converters/` | DTO factory functions: Control/Group -> DTO in one call |
 | `catalog_keys.py` | Constants for property/group/class patterns |
 
 ## Installation
@@ -98,6 +100,22 @@ from opengov_oscal_pyprivacy import normalize_legal_from_text
 normalize_legal_from_text(control, "Art. 5 Abs. 2 DSGVO")
 ```
 
+### Convert Control to DTO (v0.5.0)
+
+```python
+from opengov_oscal_pyprivacy import control_to_privacy_detail, control_to_sdm_detail
+
+# Single call replaces 15+ manual extract calls
+detail = control_to_privacy_detail(control, group_id="GOV")
+print(detail.statement)           # extracted statement
+print(detail.typical_measures)    # [TextItem(id=..., prose=...)]
+print(detail.risk_impact_high)    # PrivacyRiskImpactScenario or None
+
+sdm = control_to_sdm_detail(control, group_id="GOV")
+print(sdm.props.sdm_module)      # "ORG-GOV-01"
+print(sdm.props.sdm_goals)       # ["transparency", ...]
+```
+
 ### Risk impact scenarios
 ```python
 from opengov_oscal_pyprivacy import (
@@ -111,9 +129,9 @@ scenarios = get_risk_impact_scenarios(control)
 ## Development
 
 ```bash
-pytest                    # run tests (129 tests)
+pytest                    # run tests (220 tests)
 pytest --tb=short -v      # verbose
-coverage run -m pytest    # with coverage (90%)
+coverage run -m pytest    # with coverage (97%)
 ```
 
 ## Target Consumers

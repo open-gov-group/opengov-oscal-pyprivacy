@@ -1,18 +1,18 @@
 from __future__ import annotations
 
 from typing import List, Optional, Literal
-from pydantic import BaseModel
+from pydantic import Field
 
-from .common import TextItem
+from .common import DtoBaseModel, TextItem
 
 ImpactLevel = Literal["normal", "moderate", "high"]
 
-class PrivacyGroupSummary(BaseModel):
+class PrivacyGroupSummary(DtoBaseModel):
     id: str
     class_: Optional[str] = None
     title: str
 
-class PrivacyControlSummary(BaseModel):
+class PrivacyControlSummary(DtoBaseModel):
     id: str
     title: str
     group_id: Optional[str] = None
@@ -22,22 +22,22 @@ class PrivacyControlSummary(BaseModel):
 
 class PrivacyGroupDetail(PrivacyGroupSummary):
     description: Optional[str] = None
-    controlCount: int
+    control_count: int = Field(alias="controlCount")
     controls: List[PrivacyControlSummary] = []
 
-class PrivacyRiskScenario(BaseModel):
+class PrivacyRiskScenario(DtoBaseModel):
     title: Optional[str] = None
     description: str
 
-class PrivacyRiskImpactScenario(BaseModel):
+class PrivacyRiskImpactScenario(DtoBaseModel):
     id: str
     level: ImpactLevel
     prose: str
     data_category_example: Optional[str] = None
 
-class PrivacyControlDetail(BaseModel):
+class PrivacyControlDetail(DtoBaseModel):
     id: str
-    ctrlClass: str
+    ctrl_class: str = Field(alias="ctrlClass")
     title: str
     group_id: Optional[str] = None
     tom_id: Optional[str] = None

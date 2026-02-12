@@ -154,7 +154,59 @@ types transparently (Mixed-Mode). If you use CRUD functions exclusively, no chan
 
 No removed exports — fully backward compatible.
 
-## 6. PR Template for Service Migration
+## 6. Converter Functions (v0.5.0)
+
+v0.5.0 adds converter functions that replace manual DTO assembly with a single call.
+
+### Before (v0.4.0 — manual assembly)
+
+```python
+detail = PrivacyControlDetail(
+    id=control.id,
+    ctrl_class=control.class_ or "",
+    title=control.title or "",
+    group_id=group_id,
+    tom_id=extract_tom_id(control),
+    dsgvo_articles=extract_legal_articles(control),
+    dp_goals=list_dp_goals(control),
+    statement=extract_statement(control),
+    # ... 10 more fields
+)
+```
+
+### After (v0.5.0 — single call)
+
+```python
+from opengov_oscal_pyprivacy.converters import control_to_privacy_detail
+
+detail = control_to_privacy_detail(control, group_id=group_id)
+```
+
+### Available Converters
+
+| Converter | DTO | Service |
+| --------- | --- | ------- |
+| `control_to_privacy_summary` | `PrivacyControlSummary` | PrivacyCatalogService |
+| `control_to_privacy_detail` | `PrivacyControlDetail` | PrivacyCatalogService |
+| `group_to_privacy_summary` | `PrivacyGroupSummary` | PrivacyCatalogService |
+| `group_to_privacy_detail` | `PrivacyGroupDetail` | PrivacyCatalogService |
+| `control_to_sdm_summary` | `SdmControlSummary` | SdmCatalogService |
+| `control_to_sdm_detail` | `SdmControlDetail` | SdmCatalogService |
+| `control_to_sdm_tom_summary` | `SdmTomControlSummary` | SdmPrivacyCatalogService |
+| `control_to_sdm_tom_detail` | `SdmTomControlDetail` | SdmPrivacyCatalogService |
+| `control_to_security_control` | `SecurityControl` | ResilienceCatalogService |
+
+### DTO Naming Change (v0.5.0)
+
+All DTO fields are now snake_case in Python. Use `model_dump(by_alias=True)` for camelCase JSON output.
+
+```python
+detail = control_to_sdm_detail(control)
+detail.props.sdm_module           # Python access (snake_case)
+detail.model_dump(by_alias=True)  # JSON output (camelCase)
+```
+
+## 7. PR Template for Service Migration
 
 ```markdown
 ## Service Migration: [ServiceName]

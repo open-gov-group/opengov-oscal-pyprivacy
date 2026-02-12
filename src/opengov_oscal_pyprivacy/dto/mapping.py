@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from typing import List, Optional, Literal
-from pydantic import BaseModel, Field, field_validator
+from pydantic import Field, field_validator
 from opengov_oscal_pyprivacy.vocab import load_default_privacy_vocabs
+
+from .common import DtoBaseModel
 
 _VOCABS = None
 
@@ -12,7 +14,7 @@ def _vocabs():
         _VOCABS = load_default_privacy_vocabs()
     return _VOCABS
 
-class MappingRef(BaseModel):
+class MappingRef(DtoBaseModel):
     scheme: str
     value: str
     remarks: str | None = None
@@ -25,7 +27,7 @@ class MappingRef(BaseModel):
             raise ValueError(f"Unknown mapping scheme: {v}")
         return v
 
-class MappingRule(BaseModel):
+class MappingRule(DtoBaseModel):
     """
     A single mapping statement, e.g.:
     privacy_control_id -> [ {scheme: "sdm", value:"TOM-03"} ]
@@ -35,17 +37,17 @@ class MappingRule(BaseModel):
     confidence: Optional[float] = Field(default=None, ge=0.0, le=1.0)
     rationale: Optional[str] = None
 
-class MappingSetMeta(BaseModel):
+class MappingSetMeta(DtoBaseModel):
     id: str
     title: str
     version: str
     description: Optional[str] = None
 
-class MappingSet(BaseModel):
+class MappingSet(DtoBaseModel):
     meta: MappingSetMeta
     rules: List[MappingRule] = []
 
-class MappingHit(BaseModel):
+class MappingHit(DtoBaseModel):
     source_id: str
     target: MappingRef
     rule_confidence: Optional[float] = None

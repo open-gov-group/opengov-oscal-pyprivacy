@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from typing import Optional, Iterator
 
-from .models import Catalog, Group, Control
-from .props_parts import set_prop, remove_prop
+from .models import Catalog, Group, Control, Property
+from .crud.props import upsert_prop, remove_props
 
 
 def iter_controls(cat: Catalog) -> Iterator[Control]:
@@ -11,6 +11,35 @@ def iter_controls(cat: Catalog) -> Iterator[Control]:
     for g in cat.groups:
         for c in g.controls:
             yield c
+
+
+def iter_controls_with_group(cat: Catalog) -> Iterator[tuple[Control, Group]]:
+    """Yield (control, parent_group) pairs for all controls in top-level groups."""
+    for g in cat.groups:
+        for c in g.controls:
+            yield c, g
+
+
+def find_controls_by_prop(
+    cat: Catalog,
+    *,
+    prop_name: str,
+    prop_value: Optional[str] = None,
+    prop_class: Optional[str] = None,
+) -> list[Control]:
+    """Find all controls having a property matching the given criteria."""
+    results = []
+    for c in iter_controls(cat):
+        for p in c.props:
+            if p.name != prop_name:
+                continue
+            if prop_value is not None and p.value != prop_value:
+                continue
+            if prop_class is not None and p.class_ != prop_class:
+                continue
+            results.append(c)
+            break
+    return results
 
 
 def find_group(cat: Catalog, group_id: str) -> Optional[Group]:
@@ -61,9 +90,13 @@ def set_control_prop(cat: Catalog, control_id: str, prop_name: str, value: Optio
         raise ValueError(f"Control {control_id} not found in catalog")
 
     if value is None:
-        remove_prop(control.props, prop_name, cls=cls)
+        remove_props(control.props, name=prop_name, class_=cls)
     else:
-        set_prop(control.props, prop_name, value, cls=cls)
+        upsert_prop(
+            control.props,
+            Property(name=prop_name, value=value, **({"class": cls} if cls else {})),
+            key=("name", "class_"),
+        )
 
 
 

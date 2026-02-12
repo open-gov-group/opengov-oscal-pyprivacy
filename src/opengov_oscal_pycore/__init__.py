@@ -14,6 +14,7 @@ Scope (intentionally small):
 
 from .models import Catalog, Group, Control, Property, Link, Part
 from .repo import OscalRepository
+from .crud_catalog import iter_controls_with_group, find_controls_by_prop
 
 # Generic CRUD (mechanics)
 from .crud.props import list_props, find_props, get_prop as get_prop_v2, upsert_prop, remove_props
@@ -52,6 +53,9 @@ __all__ = [
     "add_child_part",
     "update_child_part",
     "delete_child_part",
+    # catalog query helpers
+    "iter_controls_with_group",
+    "find_controls_by_prop",
     # links CRUD
     "list_links",
     "find_links",

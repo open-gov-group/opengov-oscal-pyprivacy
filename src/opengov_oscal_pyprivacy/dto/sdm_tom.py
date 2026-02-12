@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from typing import List, Optional
 
-from pydantic import BaseModel
+from .common import DtoBaseModel
 
 
-class SdmTomControlSummary(BaseModel):
+class SdmTomControlSummary(DtoBaseModel):
     id: str
     title: str
     sdm_module: Optional[str] = None

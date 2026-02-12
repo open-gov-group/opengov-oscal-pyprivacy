@@ -43,6 +43,11 @@ from .domain.sdm_catalog import (
     set_sdm_tom_description,
     set_sdm_tom_implementation_hints,
 )
+from .domain.query import (
+    find_controls_by_tom_id,
+    find_controls_by_implementation_level,
+    find_controls_by_legal_article,
+)
 from .domain.resilience_catalog import (
     extract_domain,
     extract_objective,
@@ -50,6 +55,17 @@ from .domain.resilience_catalog import (
     set_domain,
     set_objective,
     set_description,
+)
+from .converters import (
+    control_to_privacy_summary,
+    control_to_privacy_detail,
+    group_to_privacy_summary,
+    group_to_privacy_detail,
+    control_to_sdm_summary,
+    control_to_sdm_detail,
+    control_to_sdm_tom_summary,
+    control_to_sdm_tom_detail,
+    control_to_security_control,
 )
 
 __all__ = [
@@ -106,4 +122,18 @@ __all__ = [
     "set_domain",
     "set_objective",
     "set_description",
+    # query helpers (#18)
+    "find_controls_by_tom_id",
+    "find_controls_by_implementation_level",
+    "find_controls_by_legal_article",
+    # converters (#14-#16)
+    "control_to_privacy_summary",
+    "control_to_privacy_detail",
+    "group_to_privacy_summary",
+    "group_to_privacy_detail",
+    "control_to_sdm_summary",
+    "control_to_sdm_detail",
+    "control_to_sdm_tom_summary",
+    "control_to_sdm_tom_detail",
+    "control_to_security_control",
 ]

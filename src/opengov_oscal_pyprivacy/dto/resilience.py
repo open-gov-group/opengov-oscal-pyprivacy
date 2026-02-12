@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 from typing import Optional
-from pydantic import BaseModel
+
+from .common import DtoBaseModel
 
 
-class SecurityControl(BaseModel):
+class SecurityControl(DtoBaseModel):
     id: str
     title: str
     class_: Optional[str] = None
@@ -13,7 +14,7 @@ class SecurityControl(BaseModel):
     description: Optional[str] = None
 
 
-class SecurityControlUpdateRequest(BaseModel):
+class SecurityControlUpdateRequest(DtoBaseModel):
     title: Optional[str] = None
     domain: Optional[str] = None
     objective: Optional[str] = None

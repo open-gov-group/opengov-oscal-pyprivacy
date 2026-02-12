@@ -191,20 +191,43 @@ class TestSecurityControlUpdateRequest:
 
 class TestSecurityControlRef:
 
-    def test_security_control_ref(self):
-        """SecurityControlRef must carry catalogId and controlId."""
+    def test_security_control_ref_snake_case(self):
+        """SecurityControlRef must be accessible via snake_case field names."""
+        ref = SecurityControlRef(catalog_id="cat-bsi", control_id="bsi-001")
+
+        assert ref.catalog_id == "cat-bsi"
+        assert ref.control_id == "bsi-001"
+
+    def test_security_control_ref_camel_case_alias(self):
+        """SecurityControlRef must accept camelCase aliases (populate_by_name)."""
         ref = SecurityControlRef(catalogId="cat-bsi", controlId="bsi-001")
 
-        assert ref.catalogId == "cat-bsi"
-        assert ref.controlId == "bsi-001"
+        assert ref.catalog_id == "cat-bsi"
+        assert ref.control_id == "bsi-001"
 
-    def test_security_control_ref_serialization(self):
-        """Roundtrip for SecurityControlRef."""
-        original = SecurityControlRef(catalogId="cat-iso", controlId="iso-042")
-        data = original.model_dump()
+    def test_security_control_ref_serialization_by_alias(self):
+        """model_dump(by_alias=True) must produce camelCase keys."""
+        ref = SecurityControlRef(catalog_id="cat-iso", control_id="iso-042")
+        data = ref.model_dump(by_alias=True)
 
         assert data == {"catalogId": "cat-iso", "controlId": "iso-042"}
-        assert SecurityControlRef.model_validate(data) == original
+
+    def test_security_control_ref_roundtrip(self):
+        """Roundtrip: camelCase dict -> model -> model_dump(by_alias=True) -> back."""
+        camel_dict = {"catalogId": "cat-iso", "controlId": "iso-042"}
+        obj = SecurityControlRef(**camel_dict)
+
+        assert obj.catalog_id == "cat-iso"
+        assert obj.control_id == "iso-042"
+        assert obj.model_dump(by_alias=True) == camel_dict
+
+    def test_security_control_ref_serialization_snake(self):
+        """model_dump() (default) must produce snake_case keys."""
+        ref = SecurityControlRef(catalog_id="cat-iso", control_id="iso-042")
+        data = ref.model_dump()
+
+        assert data == {"catalog_id": "cat-iso", "control_id": "iso-042"}
+        assert SecurityControlRef.model_validate(data) == ref
 
 
 class TestMappingStandards:
@@ -245,24 +268,37 @@ class TestMappingStandards:
 
 class TestSdmSecurityMapping:
 
-    def test_sdm_security_mapping_defaults(self):
-        """SdmSecurityMapping with only required fields."""
+    def test_sdm_security_mapping_defaults_snake_case(self):
+        """SdmSecurityMapping constructed with snake_case field names."""
+        obj = SdmSecurityMapping(
+            sdm_control_id="sdm-1",
+            sdm_title="Verschluesselung",
+        )
+
+        assert obj.sdm_control_id == "sdm-1"
+        assert obj.sdm_title == "Verschluesselung"
+        assert obj.security_controls == []
+        assert obj.standards == MappingStandards()
+        assert obj.notes is None
+
+    def test_sdm_security_mapping_defaults_camel_case(self):
+        """SdmSecurityMapping constructed with camelCase aliases."""
         obj = SdmSecurityMapping(
             sdmControlId="sdm-1",
             sdmTitle="Verschluesselung",
         )
 
-        assert obj.sdmControlId == "sdm-1"
-        assert obj.sdmTitle == "Verschluesselung"
-        assert obj.securityControls == []
+        assert obj.sdm_control_id == "sdm-1"
+        assert obj.sdm_title == "Verschluesselung"
+        assert obj.security_controls == []
         assert obj.standards == MappingStandards()
         assert obj.notes is None
 
     def test_sdm_security_mapping_full(self):
         """SdmSecurityMapping with all fields populated."""
         refs = [
-            SecurityControlRef(catalogId="cat-bsi", controlId="bsi-001"),
-            SecurityControlRef(catalogId="cat-iso", controlId="iso-042"),
+            SecurityControlRef(catalog_id="cat-bsi", control_id="bsi-001"),
+            SecurityControlRef(catalog_id="cat-iso", control_id="iso-042"),
         ]
         standards = MappingStandards(
             bsi=["BSI-100"],
@@ -271,28 +307,54 @@ class TestSdmSecurityMapping:
         )
 
         obj = SdmSecurityMapping(
-            sdmControlId="sdm-2",
-            sdmTitle="Zugriffskontrolle",
-            securityControls=refs,
+            sdm_control_id="sdm-2",
+            sdm_title="Zugriffskontrolle",
+            security_controls=refs,
             standards=standards,
             notes="Besondere Hinweise",
         )
 
-        assert obj.sdmControlId == "sdm-2"
-        assert obj.sdmTitle == "Zugriffskontrolle"
-        assert len(obj.securityControls) == 2
-        assert obj.securityControls[0].catalogId == "cat-bsi"
-        assert obj.securityControls[1].controlId == "iso-042"
+        assert obj.sdm_control_id == "sdm-2"
+        assert obj.sdm_title == "Zugriffskontrolle"
+        assert len(obj.security_controls) == 2
+        assert obj.security_controls[0].catalog_id == "cat-bsi"
+        assert obj.security_controls[1].control_id == "iso-042"
         assert obj.standards.bsi == ["BSI-100"]
         assert obj.notes == "Besondere Hinweise"
 
-    def test_sdm_security_mapping_serialization(self):
+    def test_sdm_security_mapping_serialization_by_alias(self):
+        """model_dump(by_alias=True) must produce camelCase keys."""
+        obj = SdmSecurityMapping(
+            sdm_control_id="sdm-3",
+            sdm_title="Protokollierung",
+            security_controls=[
+                SecurityControlRef(catalog_id="cat-nist", control_id="nist-au-2"),
+            ],
+            standards=MappingStandards(
+                bsi=["BSI-OPS.1.1"],
+                iso27001=["A.12.4"],
+                iso27701=None,
+            ),
+            notes="Audit-Log-Anforderung",
+        )
+
+        data = obj.model_dump(by_alias=True)
+
+        assert "sdmControlId" in data
+        assert "sdmTitle" in data
+        assert "securityControls" in data
+        assert data["sdmControlId"] == "sdm-3"
+        assert data["sdmTitle"] == "Protokollierung"
+        assert data["securityControls"][0]["catalogId"] == "cat-nist"
+        assert data["securityControls"][0]["controlId"] == "nist-au-2"
+
+    def test_sdm_security_mapping_roundtrip(self):
         """Roundtrip: model_dump -> model_validate must yield equal object."""
         original = SdmSecurityMapping(
-            sdmControlId="sdm-3",
-            sdmTitle="Protokollierung",
-            securityControls=[
-                SecurityControlRef(catalogId="cat-nist", controlId="nist-au-2"),
+            sdm_control_id="sdm-3",
+            sdm_title="Protokollierung",
+            security_controls=[
+                SecurityControlRef(catalog_id="cat-nist", control_id="nist-au-2"),
             ],
             standards=MappingStandards(
                 bsi=["BSI-OPS.1.1"],
@@ -307,3 +369,25 @@ class TestSdmSecurityMapping:
 
         assert restored == original
         assert restored.model_dump() == data
+
+    def test_sdm_security_mapping_camel_case_roundtrip(self):
+        """Roundtrip: camelCase dict -> model -> model_dump(by_alias=True) -> camelCase dict."""
+        camel_dict = {
+            "sdmControlId": "sdm-rt",
+            "sdmTitle": "Roundtrip Test",
+            "securityControls": [
+                {"catalogId": "cat-x", "controlId": "ctrl-y"},
+            ],
+            "standards": {"bsi": None, "iso27001": None, "iso27701": None},
+            "notes": None,
+        }
+
+        obj = SdmSecurityMapping(**camel_dict)
+
+        assert obj.sdm_control_id == "sdm-rt"
+        assert obj.sdm_title == "Roundtrip Test"
+        assert obj.security_controls[0].catalog_id == "cat-x"
+
+        dumped = obj.model_dump(by_alias=True)
+
+        assert dumped == camel_dict

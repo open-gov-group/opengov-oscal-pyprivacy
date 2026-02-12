@@ -1,36 +1,37 @@
 from __future__ import annotations
 from typing import List, Optional
-from pydantic import BaseModel
+from pydantic import Field
 
+from .common import DtoBaseModel
 from .mapping import MappingRef as RelatedMapping
 
-class SdmControlSummaryProps(BaseModel):
-    sdmModule: Optional[str] = None
-    sdmGoals: List[str] = []
-    dsgvoArticles: List[str] = []
+class SdmControlSummaryProps(DtoBaseModel):
+    sdm_module: Optional[str] = Field(default=None, alias="sdmModule")
+    sdm_goals: List[str] = Field(default=[], alias="sdmGoals")
+    dsgvo_articles: List[str] = Field(default=[], alias="dsgvoArticles")
 
-class SdmControlSummary(BaseModel):
+class SdmControlSummary(DtoBaseModel):
     id: str
     title: str
-    groupId: Optional[str] = None
+    group_id: Optional[str] = Field(default=None, alias="groupId")
     props: SdmControlSummaryProps
 
 class SdmControlDetailProps(SdmControlSummaryProps):
-    implementationLevel: Optional[str] = None
-    dpRiskImpact: Optional[str] = None
-    relatedMappings: List[RelatedMapping] = []
+    implementation_level: Optional[str] = Field(default=None, alias="implementationLevel")
+    dp_risk_impact: Optional[str] = Field(default=None, alias="dpRiskImpact")
+    related_mappings: List[RelatedMapping] = Field(default=[], alias="relatedMappings")
 
-class SdmControlDetail(BaseModel):
+class SdmControlDetail(DtoBaseModel):
     id: str
     title: str
     class_: Optional[str] = None
-    groupId: Optional[str] = None
+    group_id: Optional[str] = Field(default=None, alias="groupId")
     props: SdmControlDetailProps
 
-class SdmControlUpdateProps(BaseModel):
-    implementationLevel: Optional[str] = None
-    dpRiskImpact: Optional[str] = None
-    relatedMappings: Optional[List[RelatedMapping]] = None
+class SdmControlUpdateProps(DtoBaseModel):
+    implementation_level: Optional[str] = Field(default=None, alias="implementationLevel")
+    dp_risk_impact: Optional[str] = Field(default=None, alias="dpRiskImpact")
+    related_mappings: Optional[List[RelatedMapping]] = Field(default=None, alias="relatedMappings")
 
-class SdmControlUpdateRequest(BaseModel):
+class SdmControlUpdateRequest(DtoBaseModel):
     props: SdmControlUpdateProps
