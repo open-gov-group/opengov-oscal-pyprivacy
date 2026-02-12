@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.6.0] - 2026-02-12
+
+Phase 3: Workbench-Readiness — Typed Metadata, BackMatter, Group CRUD, Validation.
+
+### Added
+
+- Models: `OscalMetadata`, `Role`, `Party` with typed fields and alias support (`last-modified` -> `last_modified`) (#21)
+- Models: `BackMatter`, `Resource`, `Rlink` with `Catalog.back_matter` field (#22)
+- CRUD: `add_group`, `delete_group`, `update_group_title`, `move_control` in `crud_catalog.py` (#23)
+- CRUD: `find_resource`, `add_resource`, `remove_resource` in `crud/back_matter.py` (#22)
+- Validation: `validate_catalog`, `validate_metadata`, `validate_unique_ids`, `validate_control` with `ValidationIssue` dataclass (#24)
+- Exports: pycore `__init__.py` now exports all 50+ public functions and classes (#25)
+
+### Changed
+
+- **BREAKING**: `Catalog.metadata` changed from `Dict[str, Any]` to `OscalMetadata` Pydantic model (#21)
+- `find_group` now searches recursively in nested groups (#23)
+- `versioning.py`: fixed bug where `last_modified` (underscore) did not match OSCAL `last-modified` (hyphen) (#21)
+
+### Quality Gate (#26)
+
+- 257 tests, 97% coverage (up from 220 tests / 97%)
+- New test files: test_back_matter, test_validation
+- Python 3.10-3.14 compatible
+
 ## [0.5.0] - 2026-02-12
 
 Phase 2: Converter-Layer — DTO-Factories, Naming-Standardisierung, Query-Helpers.

@@ -2,20 +2,20 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
+from .models import OscalMetadata
 
-def touch_metadata(metadata: dict) -> None:
+
+def touch_metadata(metadata: OscalMetadata) -> None:
     """
     Aktualisiert nur last-modified.
-    """    
-    metadata["last_modified"] = datetime.now(timezone.utc).isoformat()
+    """
+    metadata.last_modified = datetime.now(timezone.utc).isoformat()
 
 
-def bump_version(metadata: dict, new_version: str) -> None:
+def bump_version(metadata: OscalMetadata, new_version: str) -> None:
     """
     Setzt version und aktualisiert last-modified.
     Erwartet ein metadata-Objekt aus oscal-pydantic (Catalog.metadata o.ä.).
     """
-    metadata["version"] = new_version
+    metadata.version = new_version
     touch_metadata(metadata)
-
-

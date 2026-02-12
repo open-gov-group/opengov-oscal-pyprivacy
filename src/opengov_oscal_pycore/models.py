@@ -69,10 +69,47 @@ class Group(OscalBaseModel):
     groups: List[Group] = Field(default_factory=list)
 
 
+class Role(OscalBaseModel):
+    id: str
+    title: Optional[str] = None
+
+
+class Party(OscalBaseModel):
+    uuid: str
+    type: Optional[str] = None
+    name: Optional[str] = None
+
+
+class OscalMetadata(OscalBaseModel):
+    title: str
+    last_modified: Optional[str] = Field(default=None, alias="last-modified")
+    version: Optional[str] = None
+    oscal_version: Optional[str] = Field(default=None, alias="oscal-version")
+    roles: List[Role] = Field(default_factory=list)
+    parties: List[Party] = Field(default_factory=list)
+
+
+class Rlink(OscalBaseModel):
+    href: str
+    media_type: Optional[str] = Field(default=None, alias="media-type")
+
+
+class Resource(OscalBaseModel):
+    uuid: str
+    title: Optional[str] = None
+    rlinks: List[Rlink] = Field(default_factory=list)
+    props: List[Property] = Field(default_factory=list)
+
+
+class BackMatter(OscalBaseModel):
+    resources: List[Resource] = Field(default_factory=list)
+
+
 class Catalog(OscalBaseModel):
     uuid: str
-    metadata: Dict[str, Any]
+    metadata: OscalMetadata
     groups: List[Group] = Field(default_factory=list)
+    back_matter: Optional[BackMatter] = Field(default=None, alias="back-matter")
 
     @model_validator(mode="before")
     @classmethod

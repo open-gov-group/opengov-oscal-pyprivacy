@@ -2,7 +2,7 @@
 
 Lightweight Python toolkit for OSCAL privacy catalogs and privacy/SDM-specific conventions.
 
-**Version:** 0.5.0 | **Python:** >=3.10 | **License:** GPL-3.0-only
+**Version:** 0.6.0 | **Python:** >=3.10 | **License:** GPL-3.0-only
 
 ## Packages
 
@@ -12,11 +12,13 @@ Minimal OSCAL subset models + generic CRUD utilities.
 
 | Module | Purpose |
 |--------|---------|
-| `models.py` | Pydantic v2 models: `Catalog`, `Group`, `Control`, `Property`, `Part`, `Link` |
+| `models.py` | Pydantic v2 models: `Catalog`, `Group`, `Control`, `Property`, `Part`, `Link`, `OscalMetadata`, `BackMatter`, `Resource` |
 | `crud/props.py` | Property CRUD: `list_props`, `find_props`, `get_prop`, `upsert_prop`, `remove_props` |
 | `crud/parts.py` | Part CRUD (Mixed-Mode: Part models + dicts): `parts_ref`, `find_part`, `ensure_part_container`, `add_child_part`, ... |
 | `crud/links.py` | Link CRUD: `list_links`, `find_links`, `get_link`, `upsert_link`, `remove_links` |
-| `crud_catalog.py` | Catalog-level CRUD + query: `find_control`, `find_controls_by_prop`, `iter_controls_with_group` |
+| `crud/back_matter.py` | BackMatter CRUD: `find_resource`, `add_resource`, `remove_resource` |
+| `crud_catalog.py` | Catalog-level CRUD + query: `find_control`, `find_group`, `add_group`, `delete_group`, `move_control`, ... |
+| `validation.py` | Catalog validation: `validate_catalog`, `validate_metadata`, `validate_unique_ids` |
 | `repo.py` | File-based I/O: `OscalRepository[T]` with `load()` / `save()` |
 
 ### opengov_oscal_pyprivacy
@@ -116,6 +118,36 @@ print(sdm.props.sdm_module)      # "ORG-GOV-01"
 print(sdm.props.sdm_goals)       # ["transparency", ...]
 ```
 
+### Typed Metadata (v0.6.0)
+
+```python
+from opengov_oscal_pycore import Catalog, OscalMetadata
+
+cat = Catalog.model_validate(data)
+print(cat.metadata.title)          # typed attribute access
+print(cat.metadata.oscal_version)  # "1.1.2"
+print(cat.metadata.roles[0].id)   # "owner"
+```
+
+### Group CRUD (v0.6.0)
+
+```python
+from opengov_oscal_pycore import add_group, delete_group, move_control, Group
+
+add_group(cat, Group(id="NEW", title="New Group"))
+move_control(cat, control_id="GOV-01", target_group_id="NEW")
+```
+
+### Validate a catalog (v0.6.0)
+
+```python
+from opengov_oscal_pycore import validate_catalog
+
+issues = validate_catalog(cat)
+for issue in issues:
+    print(f"[{issue.severity}] {issue.path}: {issue.message}")
+```
+
 ### Risk impact scenarios
 ```python
 from opengov_oscal_pyprivacy import (
@@ -129,7 +161,7 @@ scenarios = get_risk_impact_scenarios(control)
 ## Development
 
 ```bash
-pytest                    # run tests (220 tests)
+pytest                    # run tests (257 tests)
 pytest --tb=short -v      # verbose
 coverage run -m pytest    # with coverage (97%)
 ```

@@ -129,4 +129,4 @@ class TestRoundtripSafety:
         assert extract_statement(ctrl) == "Modified statement"
 
         # Verify metadata survived (extra fields)
-        assert reloaded.metadata.get("title") is not None
+        assert reloaded.metadata.title is not None

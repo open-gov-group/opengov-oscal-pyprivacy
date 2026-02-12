@@ -1,4 +1,4 @@
-# Migration Guide: pyprivacy v0.3.0 -> v0.4.0
+# Migration Guide: pyprivacy v0.3.0 -> v0.6.0
 
 ## 1. Update Dependency
 
@@ -206,7 +206,95 @@ detail.props.sdm_module           # Python access (snake_case)
 detail.model_dump(by_alias=True)  # JSON output (camelCase)
 ```
 
-## 7. PR Template for Service Migration
+## 8. Typed Metadata (v0.6.0) — BREAKING CHANGE
+
+`Catalog.metadata` changed from `Dict[str, Any]` to `OscalMetadata` Pydantic model.
+
+### Before (v0.5.0)
+
+```python
+cat.metadata["title"]              # dict access
+cat.metadata["last-modified"]      # hyphenated key
+cat.metadata.get("version", "")    # dict .get()
+```
+
+### After (v0.6.0)
+
+```python
+cat.metadata.title                 # attribute access
+cat.metadata.last_modified         # snake_case (alias: "last-modified")
+cat.metadata.version or ""         # Optional field
+cat.metadata.oscal_version         # alias: "oscal-version"
+cat.metadata.roles                 # List[Role] (typed)
+cat.metadata.parties               # List[Party] (typed)
+```
+
+### JSON serialization
+
+```python
+# Aliases are used automatically when serializing:
+cat.metadata.model_dump(by_alias=True)
+# {"title": "...", "last-modified": "...", "oscal-version": "..."}
+```
+
+### Round-trip safety preserved
+
+`OscalMetadata` uses `extra="allow"`, so unknown metadata fields survive load/save cycles.
+
+### Versioning helpers
+
+```python
+from opengov_oscal_pycore import touch_metadata, bump_version
+
+touch_metadata(cat.metadata)        # sets last_modified to now (UTC)
+bump_version(cat.metadata, "2.0.0") # sets version + touches last_modified
+```
+
+## 9. BackMatter Support (v0.6.0)
+
+The `back-matter` section is now a typed field on `Catalog`.
+
+```python
+from opengov_oscal_pycore import find_resource, add_resource, Resource
+
+# Access typed back-matter
+if cat.back_matter:
+    for res in cat.back_matter.resources:
+        print(res.title, res.rlinks[0].href)
+
+# CRUD
+resource = find_resource(cat.back_matter, uuid="...")
+add_resource(cat.back_matter, Resource(uuid="new-uuid", title="New Resource"))
+```
+
+## 10. Group CRUD (v0.6.0)
+
+```python
+from opengov_oscal_pycore import (
+    add_group, delete_group, update_group_title, move_control, find_group,
+    Group,
+)
+
+add_group(cat, Group(id="NEW", title="New Group"))
+update_group_title(cat, "NEW", "Renamed Group")
+move_control(cat, "GOV-01", "NEW")      # move control to different group
+delete_group(cat, "OLD")                 # remove group + contents
+find_group(cat, "nested-id")            # recursive search in nested groups
+```
+
+## 11. Validation (v0.6.0)
+
+```python
+from opengov_oscal_pycore import validate_catalog
+
+issues = validate_catalog(cat)
+for issue in issues:
+    print(f"[{issue.severity}] {issue.path}: {issue.message}")
+# [warning] metadata.version: Catalog version not specified
+# [error] groups[1].controls[0].id: Duplicate control ID 'GOV-01'
+```
+
+## 12. PR Template for Service Migration
 
 ```markdown
 ## Service Migration: [ServiceName]
@@ -216,6 +304,7 @@ detail.model_dump(by_alias=True)  # JSON output (camelCase)
 - [ ] Replace local DTOs with pyprivacy DTO imports
 - [ ] Remove deprecated helper functions
 - [ ] Update tests to use typed models
+- [ ] Migrate metadata dict access to attribute access (v0.6.0)
 
 ### Testing
 - [ ] All existing service tests pass
