@@ -5,8 +5,11 @@ from dataclasses import dataclass
 from importlib.resources import files
 from typing import Any, Dict, Optional, Tuple, Literal
 
-from opengov_oscal_pycore.models import Control
-from opengov_oscal_pycore.crud.parts import parts_ref, ensure_part_container
+from opengov_oscal_pycore.models import Control, Property
+from opengov_oscal_pycore.crud.parts import (
+    parts_ref, ensure_part_container, _get, _set,
+)
+from opengov_oscal_pycore.crud.props import find_props, remove_props
 
 ImpactLevel = Literal["normal", "moderate", "high"]
 
@@ -59,25 +62,49 @@ class RiskImpactScenario:
     data_category_example: Optional[str] = None
 
 
-def _get_prop_value(part: Dict[str, Any], prop_name: str) -> Optional[str]:
-    for pr in part.get("props", []) or []:
-        if isinstance(pr, dict) and pr.get("name") == prop_name:
-            return pr.get("value")
+# ---------------------------------------------------------------------------
+# Mixed-mode prop helpers for parts (dict or Part/Property objects)
+# ---------------------------------------------------------------------------
+
+def _get_prop_value(part: Any, prop_name: str) -> Optional[str]:
+    """Read a prop value from a part (dict or Part model)."""
+    props = _get(part, "props", []) or []
+    for pr in props:
+        if _get(pr, "name") == prop_name:
+            return _get(pr, "value")
     return None
 
 
-def _set_or_replace_prop(part: Dict[str, Any], prop: Dict[str, Any]) -> None:
-    props = part.setdefault("props", [])
+def _set_or_replace_prop(part: Any, *, name: str, class_: str, value: str) -> None:
+    """Set or replace a property on a part (dict or Part model)."""
+    from pydantic import BaseModel
+    props = _get(part, "props")
     if not isinstance(props, list):
-        part["props"] = props = []
+        props = []
+        _set(part, "props", props)
 
-    name = prop.get("name")
-    cls = prop.get("class")
+    # Remove existing with same name+class
     props[:] = [
         p for p in props
-        if not (isinstance(p, dict) and p.get("name") == name and p.get("class") == cls)
+        if not (_get(p, "name") == name and _get(p, "class", _get(p, "class_")) == class_)
     ]
-    props.append(prop)
+
+    # Add new prop: use Property model if parent uses Pydantic, else dict
+    if isinstance(part, BaseModel):
+        props.append(Property(name=name, value=value, **{"class": class_}))
+    else:
+        props.append({"name": name, "class": class_, "value": value})
+
+
+def _remove_prop(part: Any, *, name: str, class_: str) -> None:
+    """Remove a property from a part by name+class."""
+    props = _get(part, "props")
+    if not isinstance(props, list):
+        return
+    props[:] = [
+        p for p in props
+        if not (_get(p, "name") == name and _get(p, "class", _get(p, "class_")) == class_)
+    ]
 
 
 def _as_level(val: Optional[str]) -> Optional[ImpactLevel]:
@@ -86,24 +113,26 @@ def _as_level(val: Optional[str]) -> Optional[ImpactLevel]:
     return None
 
 
+# ---------------------------------------------------------------------------
+# Public API
+# ---------------------------------------------------------------------------
+
 def get_risk_impact_scenarios(control: Control) -> Dict[ImpactLevel, RiskImpactScenario]:
     cfg = load_risk_set()
     root_parts = parts_ref(control)
 
     container = None
     for p in root_parts:
-        if isinstance(p, dict) and p.get("name") == cfg.container_name:
+        if _get(p, "name") == cfg.container_name:
             container = p
             break
 
     # MVP tolerance: if no container part exists, read from root
-    children = (container.get("parts", []) if isinstance(container, dict) else root_parts) or []
+    children = (_get(container, "parts", []) if container is not None else root_parts) or []
 
     out: Dict[ImpactLevel, RiskImpactScenario] = {}
     for ch in children:
-        if not isinstance(ch, dict):
-            continue
-        if ch.get("name") != cfg.item_name:
+        if _get(ch, "name") != cfg.item_name:
             continue
 
         level = _as_level(_get_prop_value(ch, cfg.impact_prop_name))
@@ -111,9 +140,9 @@ def get_risk_impact_scenarios(control: Control) -> Dict[ImpactLevel, RiskImpactS
             continue
 
         out[level] = RiskImpactScenario(
-            id=ch.get("id", ""),
+            id=_get(ch, "id", ""),
             level=level,
-            prose=ch.get("prose", "") or "",
+            prose=_get(ch, "prose", "") or "",
             data_category_example=_get_prop_value(ch, cfg.data_category_prop_name),
         )
     return out
@@ -136,49 +165,53 @@ def upsert_risk_impact_scenario(
         prose=None,
     )
 
-    children = container.setdefault("parts", [])
+    children = _get(container, "parts", [])
     if not isinstance(children, list):
-        container["parts"] = children = []
+        children = []
+        _set(container, "parts", children)
 
     # find existing by impact-level prop
     existing = None
     for ch in children:
-        if not isinstance(ch, dict) or ch.get("name") != cfg.item_name:
+        if _get(ch, "name") != cfg.item_name:
             continue
         if _get_prop_value(ch, cfg.impact_prop_name) == level:
             existing = ch
             break
 
     if existing is None:
-        existing = {
-            "id": f"{control_id}-risk-impact-{level}",
-            "name": cfg.item_name,
-            "class": cfg.item_class,
-            "props": [],
-        }
+        # Create new child matching the container's type (Part model or dict)
+        from opengov_oscal_pycore.crud.parts import _container_uses_part_models
+        from opengov_oscal_pycore.models import Part
+        if _container_uses_part_models(container):
+            existing = Part(
+                id=f"{control_id}-risk-impact-{level}",
+                name=cfg.item_name,
+                **{"class": cfg.item_class},
+            )
+        else:
+            existing = {
+                "id": f"{control_id}-risk-impact-{level}",
+                "name": cfg.item_name,
+                "class": cfg.item_class,
+                "props": [],
+            }
         children.append(existing)
 
-    existing["prose"] = prose
-    existing["class"] = cfg.item_class
-    _set_or_replace_prop(existing, {"name": cfg.impact_prop_name, "class": cfg.impact_prop_class, "value": level})
+    _set(existing, "prose", prose)
+    _set_or_replace_prop(existing, name=cfg.impact_prop_name, class_=cfg.impact_prop_class, value=level)
 
     if data_category_example:
         _set_or_replace_prop(
             existing,
-            {"name": cfg.data_category_prop_name, "class": cfg.data_category_prop_class, "value": data_category_example},
+            name=cfg.data_category_prop_name,
+            class_=cfg.data_category_prop_class,
+            value=data_category_example,
         )
     else:
-        props = existing.get("props", []) or []
-        existing["props"] = [
-            p for p in props
-            if not (
-                isinstance(p, dict)
-                and p.get("name") == cfg.data_category_prop_name
-                and p.get("class") == cfg.data_category_prop_class
-            )
-        ]
+        _remove_prop(existing, name=cfg.data_category_prop_name, class_=cfg.data_category_prop_class)
 
-    return existing.get("id", "")
+    return _get(existing, "id", "")
 
 
 def delete_risk_impact_scenario(control: Control, level: ImpactLevel) -> None:
@@ -190,9 +223,9 @@ def delete_risk_impact_scenario(control: Control, level: ImpactLevel) -> None:
 
     root_parts = parts_ref(control)
     for p in root_parts:
-        if isinstance(p, dict) and p.get("name") == cfg.container_name:
-            children = p.get("parts", []) or []
-            p["parts"] = [ch for ch in children if not (isinstance(ch, dict) and ch.get("id") == target.id)]
+        if _get(p, "name") == cfg.container_name:
+            children = _get(p, "parts", []) or []
+            _set(p, "parts", [ch for ch in children if _get(ch, "id") != target.id])
             return
 
-    root_parts[:] = [ch for ch in root_parts if not (isinstance(ch, dict) and ch.get("id") == target.id)]
+    root_parts[:] = [ch for ch in root_parts if _get(ch, "id") != target.id]

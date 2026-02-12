@@ -31,11 +31,32 @@ class Property(OscalBaseModel):
     remarks: Optional[str] = None
 
 
+class Link(OscalBaseModel):
+    href: str
+    rel: Optional[str] = None
+    text: Optional[str] = None
+
+
+class Part(OscalBaseModel):
+    id: Optional[str] = None
+    name: str
+    class_: Optional[str] = Field(default=None, alias="class")
+    title: Optional[str] = None
+    prose: Optional[str] = None
+    props: List[Property] = Field(default_factory=list)
+    links: List[Link] = Field(default_factory=list)
+    parts: List[Part] = Field(default_factory=list)
+
+
 class Control(OscalBaseModel):
     id: str
     class_: Optional[str] = Field(default=None, alias="class")
     title: Optional[str] = None
     props: List[Property] = Field(default_factory=list)
+    parts: List[Part] = Field(default_factory=list)
+    links: List[Link] = Field(default_factory=list)
+    params: List[Dict[str, Any]] = Field(default_factory=list)
+    controls: List[Control] = Field(default_factory=list)
 
 
 class Group(OscalBaseModel):
@@ -43,6 +64,9 @@ class Group(OscalBaseModel):
     class_: Optional[str] = Field(default=None, alias="class")
     title: Optional[str] = None
     controls: List[Control] = Field(default_factory=list)
+    parts: List[Part] = Field(default_factory=list)
+    props: List[Property] = Field(default_factory=list)
+    groups: List[Group] = Field(default_factory=list)
 
 
 class Catalog(OscalBaseModel):
@@ -61,3 +85,9 @@ class Catalog(OscalBaseModel):
         if isinstance(data, dict) and "catalog" in data and ("uuid" not in data and "metadata" not in data):
             return data["catalog"]
         return data
+
+
+# Rebuild models to resolve recursive forward references
+Part.model_rebuild()
+Control.model_rebuild()
+Group.model_rebuild()

@@ -19,6 +19,37 @@ from .domain.privacy_control import (
     get_maturity_level_text,
     list_dp_goals,
     replace_dp_goals,
+
+    # extract helpers (#7)
+    extract_legal_articles,
+    extract_tom_id,
+    extract_statement,
+    extract_risk_hint,
+    extract_risk_scenarios,
+    extract_maturity_level_texts,
+)
+from .domain.sdm_catalog import (
+    extract_sdm_module,
+    extract_sdm_goals,
+    extract_dsgvo_articles,
+    extract_implementation_level,
+    extract_dp_risk_impact,
+    extract_related_mappings,
+    set_implementation_level,
+    set_dp_risk_impact,
+    replace_related_mappings,
+    extract_sdm_tom_description,
+    extract_sdm_tom_implementation_hints,
+    set_sdm_tom_description,
+    set_sdm_tom_implementation_hints,
+)
+from .domain.resilience_catalog import (
+    extract_domain,
+    extract_objective,
+    extract_description,
+    set_domain,
+    set_objective,
+    set_description,
 )
 
 __all__ = [
@@ -47,5 +78,32 @@ __all__ = [
     "get_risk_impact_scenarios",
     "upsert_risk_impact_scenario",
     "delete_risk_impact_scenario",
+    # extract helpers (#7)
+    "extract_legal_articles",
+    "extract_tom_id",
+    "extract_statement",
+    "extract_risk_hint",
+    "extract_risk_scenarios",
+    "extract_maturity_level_texts",
+    # SDM catalog domain (#3)
+    "extract_sdm_module",
+    "extract_sdm_goals",
+    "extract_dsgvo_articles",
+    "extract_implementation_level",
+    "extract_dp_risk_impact",
+    "extract_related_mappings",
+    "set_implementation_level",
+    "set_dp_risk_impact",
+    "replace_related_mappings",
+    "extract_sdm_tom_description",
+    "extract_sdm_tom_implementation_hints",
+    "set_sdm_tom_description",
+    "set_sdm_tom_implementation_hints",
+    # resilience catalog domain (#4)
+    "extract_domain",
+    "extract_objective",
+    "extract_description",
+    "set_domain",
+    "set_objective",
+    "set_description",
 ]
-

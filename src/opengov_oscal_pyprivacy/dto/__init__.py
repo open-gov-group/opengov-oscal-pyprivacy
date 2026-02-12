@@ -9,6 +9,9 @@ from .sdm import (
     SdmControlUpdateRequest,
     RelatedMapping,
 )
+from .sdm_tom import SdmTomControlSummary, SdmTomControlDetail
+from .resilience import SecurityControl, SecurityControlUpdateRequest
+from .mapping_workbench import SecurityControlRef, MappingStandards, SdmSecurityMapping
 
 __all__ = [
     "TextItem", "TextItemCreate", "TextItemUpdate",
@@ -17,4 +20,10 @@ __all__ = [
     "PrivacyRiskScenario", "PrivacyRiskImpactScenario",
     "SdmControlSummary", "SdmControlDetail",
     "SdmControlUpdateRequest", "RelatedMapping",
+    # SDM-TOM (#5)
+    "SdmTomControlSummary", "SdmTomControlDetail",
+    # Resilience (#6)
+    "SecurityControl", "SecurityControlUpdateRequest",
+    # Mapping Workbench (#6)
+    "SecurityControlRef", "MappingStandards", "SdmSecurityMapping",
 ]

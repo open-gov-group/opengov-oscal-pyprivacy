@@ -8,13 +8,16 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 from opengov_oscal_pycore.models import Control, Property
 from opengov_oscal_pycore.crud.parts import (
     parts_ref,
+    find_part,
     ensure_part_container,
     list_child_parts,
     add_child_part,
     update_child_part,
     delete_child_part,
+    _get,
+    _set,
 )
-from opengov_oscal_pycore.crud.props import find_props, remove_props, upsert_prop
+from opengov_oscal_pycore.crud.props import find_props, remove_props, upsert_prop, get_prop
 
 from .. import catalog_keys as K
 
@@ -77,8 +80,8 @@ def _list_items(control: Control, container_name: str) -> List[Dict[str, str]]:
     container = ensure_part_container(control, container_name)
     out: List[Dict[str, str]] = []
     for item in list_child_parts(container):
-        if item.get("name") in cfg.accepted_item_names:
-            out.append({"id": item.get("id", ""), "prose": item.get("prose", "")})
+        if _get(item, "name") in cfg.accepted_item_names:
+            out.append({"id": _get(item, "id", ""), "prose": _get(item, "prose", "")})
     return out
 
 
@@ -86,7 +89,7 @@ def _add_item(control: Control, container_name: str, prose: str) -> str:
     part_sets = load_part_sets()
     cfg = part_sets[container_name]
     container = ensure_part_container(control, container_name, part_id=f"{control.id.lower()}-{container_name}")
-    existing_ids = [p.get("id", "") for p in list_child_parts(container) if isinstance(p.get("id", ""), str)]
+    existing_ids = [_get(p, "id", "") for p in list_child_parts(container) if isinstance(_get(p, "id", ""), str)]
     new_id = _next_seq_id(existing_ids, f"{control.id.lower()}-{cfg.id_prefix}-")
     add_child_part(container, name=cfg.canonical_item_name, part_id=new_id, prose=prose)
     return new_id
@@ -98,7 +101,7 @@ def _update_item(control: Control, container_name: str, item_id: str, prose: str
     container = ensure_part_container(control, container_name)
     # allow update independent of name (only id), but enforce canonical name on write
     updated = update_child_part(container, item_id, prose=prose)
-    updated["name"] = cfg.canonical_item_name
+    _set(updated, "name", cfg.canonical_item_name)
 
 
 def _delete_item(control: Control, container_name: str, item_id: str) -> None:
@@ -152,7 +155,7 @@ def set_risk_hint(control: Control, prose: str) -> None:
 
 def replace_risk_scenarios(control: Control, scenarios: List[Dict[str, str]]) -> None:
     container = ensure_part_container(control, "risk-scenarios", part_id=f"{control.id.lower()}-risk-scenarios")
-    container["parts"] = []
+    _set(container, "parts", [])
     for i, sc in enumerate(scenarios, start=1):
         add_child_part(
             container,
@@ -169,27 +172,27 @@ def set_maturity_level_text(control: Control, level: int, prose: str) -> None:
 
     mh = ensure_part_container(control, "maturity-hints", part_id=f"{control.id.lower()}-maturity")
     # ensure children list
-    children = mh["parts"]
+    children = _get(mh, "parts", [])
     name = f"maturity-level-{level}"
     # find by name
     child = None
     for p in children:
-        if isinstance(p, dict) and p.get("name") == name:
+        if _get(p, "name") == name:
             child = p
             break
     if child is None:
-        child = {"id": f"{mh.get('id','maturity')}-level-{level:02d}", "name": name, "props": []}
+        child = {"id": f"{_get(mh, 'id', 'maturity')}-level-{level:02d}", "name": name, "props": []}
         children.append(child)
-    child["prose"] = prose
+    _set(child, "prose", prose)
 
     # ensure maturity-level prop (as in GOV-01)
-    props = child.get("props")
+    props = _get(child, "props")
     if not isinstance(props, list):
         props = []
-        child["props"] = props
+        _set(child, "props", props)
     # remove wrong legacy prop name (maturity-level-<n>)
-    props[:] = [pr for pr in props if not (isinstance(pr, dict) and pr.get("name") == f"maturity-level-{level}")]
-    if not any(isinstance(pr, dict) and pr.get("name") == "maturity-level" and pr.get("value") == str(level) for pr in props):
+    props[:] = [pr for pr in props if not (_get(pr, "name") == f"maturity-level-{level}")]
+    if not any(_get(pr, "name") == "maturity-level" and _get(pr, "value") == str(level) for pr in props):
         props.append({"name": "maturity-level", "value": str(level)})
 
 
@@ -199,14 +202,14 @@ def get_maturity_level_text(control: Control, level: int) -> Optional[str]:
     parts = parts_ref(control)
     mh = None
     for p in parts:
-        if isinstance(p, dict) and p.get("name") == "maturity-hints":
+        if _get(p, "name") == "maturity-hints":
             mh = p
             break
     if not mh:
         return None
-    for ch in (mh.get("parts") or []):
-        if isinstance(ch, dict) and ch.get("name") == f"maturity-level-{level}":
-            return ch.get("prose")
+    for ch in (_get(mh, "parts") or []):
+        if _get(ch, "name") == f"maturity-level-{level}":
+            return _get(ch, "prose")
     return None
 
 
@@ -230,3 +233,75 @@ def replace_dp_goals(control: Control, goals: List[str]) -> None:
             Property(name="assurance_goal", value=g, ns="de", group=K.GROUP_AIM, class_=K.CLASS_TELEOLOGICAL),
             key=("name", "group", "class_", "value"),
         )
+
+
+# -----------------------------
+# Extract helpers (read-only)
+# -----------------------------
+
+def _val(obj: Any, key: str, default: Any = None) -> Any:
+    """Mixed-mode accessor: works for both dicts and Pydantic model objects."""
+    if isinstance(obj, dict):
+        return obj.get(key, default)
+    return getattr(obj, key, default)
+
+
+def extract_legal_articles(control: Control) -> List[str]:
+    """Return all legal-article values from the control's props.
+
+    Searches for props with name=K.LEGAL, group=K.GROUP_REFERENCE, class_=K.CLASS_PROOF.
+    """
+    matches = find_props(
+        control.props,
+        name=K.LEGAL,
+        group=K.GROUP_REFERENCE,
+        class_=K.CLASS_PROOF,
+    )
+    return [p.value for p in matches]
+
+
+def extract_tom_id(control: Control) -> Optional[str]:
+    """Return the SDM building-block identifier, or None."""
+    prop = get_prop(control.props, K.SDM_BUILDING_BLOCK)
+    return prop.value if prop is not None else None
+
+
+def extract_statement(control: Control) -> Optional[str]:
+    """Return the statement prose from the control's top-level parts, or None."""
+    parts = parts_ref(control)
+    part = find_part(parts, name="statement")
+    if part is None:
+        return None
+    return _get(part, "prose")
+
+
+def extract_risk_hint(control: Control) -> Optional[str]:
+    """Return the risk-hint prose from the control's top-level parts, or None."""
+    parts = parts_ref(control)
+    part = find_part(parts, name="risk-hint")
+    if part is None:
+        return None
+    return _get(part, "prose")
+
+
+def extract_risk_scenarios(control: Control) -> List[Dict[str, str]]:
+    """Return risk-scenario children as a list of {title, description} dicts."""
+    parts = parts_ref(control)
+    container = find_part(parts, name="risk-scenarios")
+    if container is None:
+        return []
+    children = list_child_parts(container)
+    out: List[Dict[str, str]] = []
+    for ch in children:
+        title = _val(ch, "title") or _val(ch, "prose") or ""
+        description = _val(ch, "prose") or ""
+        out.append({"title": title, "description": description})
+    return out
+
+
+def extract_maturity_level_texts(control: Control) -> Dict[int, Optional[str]]:
+    """Return maturity-level texts for levels 1, 3, 5."""
+    return {
+        level: get_maturity_level_text(control, level)
+        for level in (1, 3, 5)
+    }

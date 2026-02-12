@@ -12,7 +12,7 @@ Scope (intentionally small):
 - Simple versioning helpers
 """
 
-from .models import Catalog, Group, Control, Property
+from .models import Catalog, Group, Control, Property, Link, Part
 from .repo import OscalRepository
 
 # Generic CRUD (mechanics)
@@ -27,12 +27,15 @@ from .crud.parts import (
     update_child_part,
     delete_child_part,
 )
+from .crud.links import list_links, find_links, get_link, upsert_link, remove_links
 
 __all__ = [
     "Catalog",
     "Group",
     "Control",
     "Property",
+    "Link",
+    "Part",
     "OscalRepository",
     # props CRUD
     "list_props",
@@ -49,4 +52,10 @@ __all__ = [
     "add_child_part",
     "update_child_part",
     "delete_child_part",
+    # links CRUD
+    "list_links",
+    "find_links",
+    "get_link",
+    "upsert_link",
+    "remove_links",
 ]
