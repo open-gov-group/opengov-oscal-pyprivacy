@@ -305,3 +305,38 @@ def extract_maturity_level_texts(control: Control) -> Dict[int, Optional[str]]:
         level: get_maturity_level_text(control, level)
         for level in (1, 3, 5)
     }
+
+
+def extract_evidence_artifacts(control: Control) -> list[str]:
+    """Extract evidence artifact values."""
+    return [
+        p.value for p in find_props(
+            control.props,
+            name=K.EVIDENCE,
+            group=K.GROUP_VERIFICATION,
+            class_=K.CLASS_ARTIFACT,
+        )
+    ]
+
+
+def extract_maturity_domain(control: Control) -> Optional[str]:
+    """Extract maturity domain value."""
+    p = get_prop(control.props, K.MATURITY, group="responsibility", class_=K.CLASS_MATURITY_DOMAIN)
+    return p.value if p else None
+
+
+def extract_maturity_requirement(control: Control) -> Optional[int]:
+    """Extract maturity requirement level as integer."""
+    p = get_prop(control.props, K.MATURITY, group="responsibility", class_=K.CLASS_MATURITY_REQUIREMENT)
+    if p is None:
+        return None
+    try:
+        return int(p.value)
+    except (ValueError, TypeError):
+        return None
+
+
+def extract_measure_category(control: Control) -> Optional[str]:
+    """Extract measure category value."""
+    p = get_prop(control.props, K.MEASURE, group=K.GROUP_IMPLEMENTATION, class_=K.CLASS_CATEGORY)
+    return p.value if p else None

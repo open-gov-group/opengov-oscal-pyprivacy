@@ -21,3 +21,17 @@ def find_controls_by_legal_article(cat: Catalog, article: str) -> List[Control]:
     return find_controls_by_prop(
         cat, prop_name=K.LEGAL, prop_value=article, prop_class=K.CLASS_PROOF,
     )
+
+
+def find_controls_by_evidence(cat: Catalog, evidence_value: str) -> List[Control]:
+    """Find all controls with the given evidence artifact value."""
+    return find_controls_by_prop(
+        cat, prop_name=K.EVIDENCE, prop_value=evidence_value, prop_class=K.CLASS_ARTIFACT,
+    )
+
+
+def find_controls_by_maturity_domain(cat: Catalog, domain: str) -> List[Control]:
+    """Find all controls with the given maturity domain."""
+    return find_controls_by_prop(
+        cat, prop_name=K.MATURITY, prop_value=domain, prop_class=K.CLASS_MATURITY_DOMAIN,
+    )

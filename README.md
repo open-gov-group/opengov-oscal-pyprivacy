@@ -2,7 +2,7 @@
 
 Lightweight Python toolkit for OSCAL privacy catalogs and privacy/SDM-specific conventions.
 
-**Version:** 0.6.0 | **Python:** >=3.10 | **License:** GPL-3.0-only
+**Version:** 0.7.0 | **Python:** >=3.10 | **License:** GPL-3.0-only
 
 ## Packages
 
@@ -36,6 +36,8 @@ Privacy/SDM helpers, domain modules, CSV-backed vocabularies, and DTOs.
 | `legal_adapter.py` | Legal reference normalization (integrates with opengov-pylegal-utils) |
 | `domain/query.py` | Query helpers: `find_controls_by_tom_id`, `find_controls_by_legal_article` |
 | `converters/` | DTO factory functions: Control/Group -> DTO in one call |
+| `dto/ropa.py` | ROPA DTOs: RopaControlSummary, RopaControlDetail, RopaGroupSummary, RopaGroupDetail |
+| `dto/dpia.py` | DPIA DTOs: DpiaControlSummary, DpiaControlDetail, DpiaGroupSummary, DpiaGroupDetail |
 | `catalog_keys.py` | Constants for property/group/class patterns |
 
 ## Installation
@@ -148,6 +150,28 @@ for issue in issues:
     print(f"[{issue.severity}] {issue.path}: {issue.message}")
 ```
 
+### ROPA Converter (v0.7.0)
+
+```python
+from opengov_oscal_pyprivacy import control_to_ropa_detail
+
+detail = control_to_ropa_detail(control, group_id="REG")
+print(detail.evidence_artifacts)   # ["record-of-processing"]
+print(detail.maturity_domain)      # "records-of-processing"
+print(detail.maturity_requirement) # 3
+```
+
+### DPIA Converter (v0.7.0)
+
+```python
+from opengov_oscal_pyprivacy import control_to_dpia_detail
+
+detail = control_to_dpia_detail(control, group_id="DPIA")
+print(detail.evidence_artifacts)   # ["dpia-report", "risk-register"]
+print(detail.maturity_domain)      # "risk-management"
+print(detail.measure_category)     # "process"
+```
+
 ### Risk impact scenarios
 ```python
 from opengov_oscal_pyprivacy import (
@@ -161,7 +185,7 @@ scenarios = get_risk_impact_scenarios(control)
 ## Development
 
 ```bash
-pytest                    # run tests (257 tests)
+pytest                    # run tests (295 tests)
 pytest --tb=short -v      # verbose
 coverage run -m pytest    # with coverage (97%)
 ```

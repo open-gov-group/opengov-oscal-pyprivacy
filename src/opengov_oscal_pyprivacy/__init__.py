@@ -27,6 +27,12 @@ from .domain.privacy_control import (
     extract_risk_hint,
     extract_risk_scenarios,
     extract_maturity_level_texts,
+
+    # extract helpers (#27)
+    extract_evidence_artifacts,
+    extract_maturity_domain,
+    extract_maturity_requirement,
+    extract_measure_category,
 )
 from .domain.sdm_catalog import (
     extract_sdm_module,
@@ -47,6 +53,8 @@ from .domain.query import (
     find_controls_by_tom_id,
     find_controls_by_implementation_level,
     find_controls_by_legal_article,
+    find_controls_by_evidence,
+    find_controls_by_maturity_domain,
 )
 from .domain.resilience_catalog import (
     extract_domain,
@@ -66,6 +74,14 @@ from .converters import (
     control_to_sdm_tom_summary,
     control_to_sdm_tom_detail,
     control_to_security_control,
+    control_to_ropa_summary,
+    control_to_ropa_detail,
+    group_to_ropa_summary,
+    group_to_ropa_detail,
+    control_to_dpia_summary,
+    control_to_dpia_detail,
+    group_to_dpia_summary,
+    group_to_dpia_detail,
 )
 
 __all__ = [
@@ -101,6 +117,11 @@ __all__ = [
     "extract_risk_hint",
     "extract_risk_scenarios",
     "extract_maturity_level_texts",
+    # extract helpers (#27)
+    "extract_evidence_artifacts",
+    "extract_maturity_domain",
+    "extract_maturity_requirement",
+    "extract_measure_category",
     # SDM catalog domain (#3)
     "extract_sdm_module",
     "extract_sdm_goals",
@@ -126,6 +147,9 @@ __all__ = [
     "find_controls_by_tom_id",
     "find_controls_by_implementation_level",
     "find_controls_by_legal_article",
+    # query helpers (#30)
+    "find_controls_by_evidence",
+    "find_controls_by_maturity_domain",
     # converters (#14-#16)
     "control_to_privacy_summary",
     "control_to_privacy_detail",
@@ -136,4 +160,14 @@ __all__ = [
     "control_to_sdm_tom_summary",
     "control_to_sdm_tom_detail",
     "control_to_security_control",
+    # ROPA converters (#28)
+    "control_to_ropa_summary",
+    "control_to_ropa_detail",
+    "group_to_ropa_summary",
+    "group_to_ropa_detail",
+    # DPIA converters (#29)
+    "control_to_dpia_summary",
+    "control_to_dpia_detail",
+    "group_to_dpia_summary",
+    "group_to_dpia_detail",
 ]

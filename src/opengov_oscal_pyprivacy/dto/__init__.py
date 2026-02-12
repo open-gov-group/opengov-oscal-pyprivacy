@@ -12,6 +12,14 @@ from .sdm import (
 from .sdm_tom import SdmTomControlSummary, SdmTomControlDetail
 from .resilience import SecurityControl, SecurityControlUpdateRequest
 from .mapping_workbench import SecurityControlRef, MappingStandards, SdmSecurityMapping
+from .ropa import (
+    RopaControlSummary, RopaControlDetail,
+    RopaGroupSummary, RopaGroupDetail,
+)
+from .dpia import (
+    DpiaControlSummary, DpiaControlDetail,
+    DpiaGroupSummary, DpiaGroupDetail,
+)
 
 __all__ = [
     "TextItem", "TextItemCreate", "TextItemUpdate",
@@ -26,4 +34,10 @@ __all__ = [
     "SecurityControl", "SecurityControlUpdateRequest",
     # Mapping Workbench (#6)
     "SecurityControlRef", "MappingStandards", "SdmSecurityMapping",
+    # ROPA (#28)
+    "RopaControlSummary", "RopaControlDetail",
+    "RopaGroupSummary", "RopaGroupDetail",
+    # DPIA (#29)
+    "DpiaControlSummary", "DpiaControlDetail",
+    "DpiaGroupSummary", "DpiaGroupDetail",
 ]

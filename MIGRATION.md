@@ -1,4 +1,4 @@
-# Migration Guide: pyprivacy v0.3.0 -> v0.6.0
+# Migration Guide: pyprivacy v0.3.0 -> v0.7.0
 
 ## 1. Update Dependency
 
@@ -292,6 +292,56 @@ for issue in issues:
     print(f"[{issue.severity}] {issue.path}: {issue.message}")
 # [warning] metadata.version: Catalog version not specified
 # [error] groups[1].controls[0].id: Duplicate control ID 'GOV-01'
+```
+
+## 13. ROPA + DPIA Converters (v0.7.0)
+
+v0.7.0 adds ROPA (Records of Processing) and DPIA (Data Protection Impact Assessment) support.
+
+### ROPA Converters
+
+```python
+from opengov_oscal_pyprivacy.converters import (
+    control_to_ropa_summary, control_to_ropa_detail,
+    group_to_ropa_summary, group_to_ropa_detail,
+)
+from opengov_oscal_pyprivacy.dto import (
+    RopaControlSummary, RopaControlDetail,
+    RopaGroupSummary, RopaGroupDetail,
+)
+```
+
+### DPIA Converters
+
+```python
+from opengov_oscal_pyprivacy.converters import (
+    control_to_dpia_summary, control_to_dpia_detail,
+    group_to_dpia_summary, group_to_dpia_detail,
+)
+from opengov_oscal_pyprivacy.dto import (
+    DpiaControlSummary, DpiaControlDetail,
+    DpiaGroupSummary, DpiaGroupDetail,
+)
+```
+
+### New Extract Functions (v0.7.0)
+
+```python
+from opengov_oscal_pyprivacy import (
+    extract_evidence_artifacts,
+    extract_maturity_domain,
+    extract_maturity_requirement,
+    extract_measure_category,
+)
+```
+
+### New Query Helpers (v0.7.0)
+
+```python
+from opengov_oscal_pyprivacy import (
+    find_controls_by_evidence,
+    find_controls_by_maturity_domain,
+)
 ```
 
 ## 12. PR Template for Service Migration

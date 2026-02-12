@@ -52,7 +52,22 @@ from opengov_oscal_pyprivacy.domain.privacy_control import (
     extract_risk_hint,
     extract_risk_scenarios,
     extract_maturity_level_texts,
+    extract_evidence_artifacts,
+    extract_maturity_domain,
+    extract_maturity_requirement,
+    extract_measure_category,
 )
+
+
+# =====================================================================
+# Helpers
+# =====================================================================
+
+def _load_fixture() -> Catalog:
+    """Load the full privacy catalog fixture."""
+    fixture = Path(__file__).parent / "data" / "open_privacy_catalog_risk.json"
+    data = json.loads(fixture.read_text(encoding="utf-8"))
+    return Catalog.model_validate(data)
 
 
 # =====================================================================
@@ -239,3 +254,66 @@ class TestPrivacyControlExtract:
             assert texts[level] is not None, f"Level {level} text should not be None"
             assert isinstance(texts[level], str)
             assert len(texts[level]) > 0, f"Level {level} text should not be empty"
+
+
+# =====================================================================
+# Evidence, Maturity-Domain/Requirement, Measure Category tests (#27)
+# =====================================================================
+
+class TestExtractNewProperties:
+    """Tests for evidence, maturity domain/requirement, measure category extractions."""
+
+    def test_extract_evidence_artifacts_reg01(self):
+        """REG-01 has one evidence artifact."""
+        cat = _load_fixture()
+        reg = [g for g in cat.groups if g.id == "REG"][0]
+        ctrl = reg.controls[0]  # REG-01
+        artifacts = extract_evidence_artifacts(ctrl)
+        assert "record-of-processing" in artifacts
+
+    def test_extract_evidence_artifacts_multiple(self):
+        """REG-02 has 3 evidence artifacts."""
+        cat = _load_fixture()
+        reg = [g for g in cat.groups if g.id == "REG"][0]
+        ctrl = reg.controls[1]  # REG-02
+        artifacts = extract_evidence_artifacts(ctrl)
+        assert len(artifacts) == 3
+        assert "documentation-policy" in artifacts
+
+    def test_extract_evidence_artifacts_empty(self):
+        """Control without evidence props returns empty list."""
+        ctrl = Control(id="test", title="Test")
+        assert extract_evidence_artifacts(ctrl) == []
+
+    def test_extract_maturity_domain(self):
+        """REG-01 has maturity domain 'records-of-processing'."""
+        cat = _load_fixture()
+        reg = [g for g in cat.groups if g.id == "REG"][0]
+        ctrl = reg.controls[0]
+        assert extract_maturity_domain(ctrl) == "records-of-processing"
+
+    def test_extract_maturity_domain_dpia(self):
+        """DPIA-01 has maturity domain 'risk-management'."""
+        cat = _load_fixture()
+        dpia = [g for g in cat.groups if g.id == "DPIA"][0]
+        ctrl = dpia.controls[0]
+        assert extract_maturity_domain(ctrl) == "risk-management"
+
+    def test_extract_maturity_requirement(self):
+        """REG-01 has maturity requirement 4."""
+        cat = _load_fixture()
+        reg = [g for g in cat.groups if g.id == "REG"][0]
+        ctrl = reg.controls[0]
+        assert extract_maturity_requirement(ctrl) == 4
+
+    def test_extract_maturity_requirement_none(self):
+        """Control without maturity requirement returns None."""
+        ctrl = Control(id="test", title="Test")
+        assert extract_maturity_requirement(ctrl) is None
+
+    def test_extract_measure_category(self):
+        """REG-01 has measure category 'process'."""
+        cat = _load_fixture()
+        reg = [g for g in cat.groups if g.id == "REG"][0]
+        ctrl = reg.controls[0]
+        assert extract_measure_category(ctrl) == "process"

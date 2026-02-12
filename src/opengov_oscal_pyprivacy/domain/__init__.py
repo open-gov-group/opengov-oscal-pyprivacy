@@ -20,6 +20,10 @@ from .privacy_control import (
     extract_risk_hint,
     extract_risk_scenarios,
     extract_maturity_level_texts,
+    extract_evidence_artifacts,
+    extract_maturity_domain,
+    extract_maturity_requirement,
+    extract_measure_category,
 )
 from .risk_guidance import (
     get_risk_impact_scenarios,
@@ -45,6 +49,8 @@ from .query import (
     find_controls_by_tom_id,
     find_controls_by_implementation_level,
     find_controls_by_legal_article,
+    find_controls_by_evidence,
+    find_controls_by_maturity_domain,
 )
 from .resilience_catalog import (
     extract_domain,

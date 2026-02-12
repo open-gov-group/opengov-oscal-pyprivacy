@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.7.0] - 2026-02-12
+
+Phase 4: ROPA + DPIA Domains — Extract functions, DTOs, Converters, Query helpers.
+
+### Added
+
+- Extract: `extract_evidence_artifacts`, `extract_maturity_domain`, `extract_maturity_requirement`, `extract_measure_category` in `privacy_control.py` (#27)
+- DTOs: `RopaControlSummary`, `RopaControlDetail`, `RopaGroupSummary`, `RopaGroupDetail` in `dto/ropa.py` (#28)
+- DTOs: `DpiaControlSummary`, `DpiaControlDetail`, `DpiaGroupSummary`, `DpiaGroupDetail` in `dto/dpia.py` (#29)
+- Converter: `control_to_ropa_summary`, `control_to_ropa_detail`, `group_to_ropa_summary`, `group_to_ropa_detail` (#28)
+- Converter: `control_to_dpia_summary`, `control_to_dpia_detail`, `group_to_dpia_summary`, `group_to_dpia_detail` (#29)
+- Query: `find_controls_by_evidence`, `find_controls_by_maturity_domain` in `domain/query.py` (#30)
+- Exports: All ROPA/DPIA DTOs, converters, extract/query functions added to package exports (#30)
+
+### Quality Gate (#31)
+
+- 295 tests, 97% coverage (up from 257 tests / 97%)
+- New test files: test_ropa, test_dpia
+- Python 3.10-3.14 compatible
+
 ## [0.6.0] - 2026-02-12
 
 Phase 3: Workbench-Readiness — Typed Metadata, BackMatter, Group CRUD, Validation.

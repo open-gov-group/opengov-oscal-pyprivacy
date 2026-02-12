@@ -60,6 +60,8 @@ from opengov_oscal_pyprivacy.domain.query import (
     find_controls_by_tom_id,
     find_controls_by_implementation_level,
     find_controls_by_legal_article,
+    find_controls_by_evidence,
+    find_controls_by_maturity_domain,
 )
 
 class TestDomainQueryHelpers:
@@ -75,4 +77,33 @@ class TestDomainQueryHelpers:
 
     def test_find_by_legal_article(self, catalog):
         found = find_controls_by_legal_article(catalog, "nonexistent-article")
+        assert found == []
+
+
+class TestNewQueryHelpers:
+    def test_find_by_evidence_existing(self, catalog):
+        found = find_controls_by_evidence(catalog, "record-of-processing")
+        assert len(found) > 0
+        assert any(c.id.startswith("REG") for c in found)
+
+    def test_find_by_evidence_nonexistent(self, catalog):
+        found = find_controls_by_evidence(catalog, "nonexistent")
+        assert found == []
+
+    def test_find_by_maturity_domain_existing(self, catalog):
+        found = find_controls_by_maturity_domain(catalog, "records-of-processing")
+        assert len(found) > 0
+
+    def test_find_by_maturity_domain_risk_management(self, catalog):
+        found = find_controls_by_maturity_domain(catalog, "risk-management")
+        assert len(found) > 0
+        assert any(c.id.startswith("DPIA") for c in found)
+
+    def test_find_by_evidence_dpia_report(self, catalog):
+        found = find_controls_by_evidence(catalog, "dpia-report")
+        assert len(found) > 0
+        assert any(c.id.startswith("DPIA") for c in found)
+
+    def test_find_by_maturity_domain_nonexistent(self, catalog):
+        found = find_controls_by_maturity_domain(catalog, "nonexistent-domain")
         assert found == []
