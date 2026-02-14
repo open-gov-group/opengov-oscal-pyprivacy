@@ -19,6 +19,15 @@ from .models import (
     OscalMetadata, Role, Party,
     BackMatter, Resource, Rlink,
 )
+from .models_component import (
+    ComponentDefinition, Component, Capability,
+    ControlImplementation, ImplementedRequirement,
+)
+from .models_profile import Profile, ImportRef, Modify
+from .models_ssp import (
+    SystemSecurityPlan, SspImplementedRequirement, SspControlImplementation,
+    SystemCharacteristics, ImportProfile,
+)
 
 # Repository
 from .repo import OscalRepository
@@ -72,11 +81,29 @@ from .validation import (
     validate_control,
 )
 
+# Diff
+from .diff import (
+    DiffChange,
+    DiffSummary,
+    OscalDiffResult,
+    diff_oscal,
+    diff_catalogs,
+    diff_controls,
+)
+
 __all__ = [
     # Models
     "Catalog", "Group", "Control", "Property", "Link", "Part",
     "OscalMetadata", "Role", "Party",
     "BackMatter", "Resource", "Rlink",
+    # Component Definition Models
+    "ComponentDefinition", "Component", "Capability",
+    "ControlImplementation", "ImplementedRequirement",
+    # Profile Models
+    "Profile", "ImportRef", "Modify",
+    # SSP Models
+    "SystemSecurityPlan", "SspImplementedRequirement", "SspControlImplementation",
+    "SystemCharacteristics", "ImportProfile",
     # Repository
     "OscalRepository",
     # Catalog CRUD
@@ -98,4 +125,7 @@ __all__ = [
     # Validation
     "ValidationIssue", "validate_catalog", "validate_metadata",
     "validate_unique_ids", "validate_control",
+    # Diff
+    "DiffChange", "DiffSummary", "OscalDiffResult",
+    "diff_oscal", "diff_catalogs", "diff_controls",
 ]

@@ -83,6 +83,29 @@ from .converters import (
     group_to_dpia_summary,
     group_to_dpia_detail,
 )
+# Profile domain (#42)
+from .domain.profile import (
+    resolve_profile_imports,
+    build_profile_from_controls,
+    add_profile_import,
+)
+# SSP domain (#44)
+from .domain.ssp import (
+    generate_implemented_requirements,
+    attach_evidence_to_ssp,
+    get_import_profile_href,
+)
+# Mapping domain (#43)
+from .domain.mapping import (
+    list_mappings,
+    get_mapping,
+    upsert_mapping,
+    delete_mapping,
+    calculate_mapping_coverage,
+    resolve_transitive_mappings,
+)
+# DiffService (#46)
+from .services.diff_service import OscalDiffService
 
 __all__ = [
     "LegalPropSpec",
@@ -170,4 +193,21 @@ __all__ = [
     "control_to_dpia_detail",
     "group_to_dpia_summary",
     "group_to_dpia_detail",
+    # Profile domain (#42)
+    "resolve_profile_imports",
+    "build_profile_from_controls",
+    "add_profile_import",
+    # SSP domain (#44)
+    "generate_implemented_requirements",
+    "attach_evidence_to_ssp",
+    "get_import_profile_href",
+    # Mapping domain (#43)
+    "list_mappings",
+    "get_mapping",
+    "upsert_mapping",
+    "delete_mapping",
+    "calculate_mapping_coverage",
+    "resolve_transitive_mappings",
+    # DiffService (#46)
+    "OscalDiffService",
 ]

@@ -1,4 +1,4 @@
-# Migration Guide: pyprivacy v0.3.0 -> v0.8.0
+# Migration Guide: pyprivacy v0.3.0 -> v0.9.0
 
 ## 1. Update Dependency
 
@@ -404,3 +404,90 @@ from opengov_oscal_pyprivacy.codelist import TranslationOverlay
 overlay = TranslationOverlay.load_defaults()
 overlay.get_label("data-categories", "health-data", "fr")  # "Données de santé"
 ```
+
+## 15. OSCAL Architecture Models (v0.9.0)
+
+v0.9.0 adds the three missing OSCAL document types (Profile, SSP, ComponentDefinition), a Mapping Domain, and a DiffService.
+
+### Profile Model + Resolver
+
+```python
+from opengov_oscal_pycore import Profile, ImportRef, Modify
+
+profile = Profile.model_validate(json.load(open("profile.json")))
+print(profile.imports[0].href)
+
+# Resolve imports into a flat catalog
+from opengov_oscal_pyprivacy import resolve_profile_imports
+resolved = resolve_profile_imports(profile, catalog_loader=my_loader)
+
+# Build a new profile selecting specific controls
+from opengov_oscal_pyprivacy import build_profile_from_controls
+profile = build_profile_from_controls(catalog, ["GOV-01", "GOV-02"], title="My Profile", version="1.0")
+```
+
+### SSP Model + IR Generation
+
+```python
+from opengov_oscal_pycore import SystemSecurityPlan, SspImplementedRequirement
+
+ssp = SystemSecurityPlan.model_validate(json.load(open("ssp.json")))
+print(ssp.import_profile.href)
+
+# Generate IR stubs for all controls
+from opengov_oscal_pyprivacy import generate_implemented_requirements
+irs = generate_implemented_requirements(resolved_catalog)
+
+# Attach evidence
+from opengov_oscal_pyprivacy import attach_evidence_to_ssp
+from opengov_oscal_pycore import Resource
+attach_evidence_to_ssp(ssp, Resource(uuid="...", title="Evidence"), statement_control_id="GOV-01")
+```
+
+### ComponentDefinition Model
+
+```python
+from opengov_oscal_pycore import ComponentDefinition, Component, Capability
+
+comp_def = ComponentDefinition.model_validate(json.load(open("component-definition.json")))
+print(comp_def.components[0].title)
+print(comp_def.components[0].control_implementations[0].implemented_requirements)
+```
+
+### Mapping Domain + Coverage
+
+```python
+from opengov_oscal_pyprivacy import (
+    list_mappings, get_mapping, upsert_mapping, delete_mapping,
+    calculate_mapping_coverage, resolve_transitive_mappings,
+)
+
+mappings = list_mappings(mapping_data)
+coverage = calculate_mapping_coverage(catalog, mapping_data)
+print(f"{coverage.coverage_percent}% controls mapped")
+print(f"Per group: {coverage.per_group_coverage}")
+```
+
+### DiffService
+
+```python
+from opengov_oscal_pyprivacy import OscalDiffService
+from opengov_oscal_pycore import diff_catalogs, diff_controls
+
+# Low-level
+result = diff_catalogs(old_catalog, new_catalog)
+print(result.summary.added, result.summary.changed, result.summary.removed)
+
+# High-level service
+svc = OscalDiffService(ignore_paths=["metadata.last-modified"])
+result = svc.diff_files(Path("old.json"), Path("new.json"))
+print(svc.format_diff_summary(result))
+```
+
+### Optional: deepdiff dependency
+
+```bash
+pip install opengov-oscal-pyprivacy[diff]  # install with deepdiff support
+```
+
+Without deepdiff, the diff falls back to a simple recursive dict comparison.

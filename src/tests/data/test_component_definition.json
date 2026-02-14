@@ -1,0 +1,51 @@
+{
+  "component-definition": {
+    "uuid": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+    "metadata": {
+      "title": "Test Privacy Component Definition",
+      "last-modified": "2026-01-01T00:00:00Z",
+      "version": "1.0.0",
+      "oscal-version": "1.1.2"
+    },
+    "components": [
+      {
+        "uuid": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+        "type": "software",
+        "title": "Privacy Management System",
+        "description": "Software component implementing privacy controls",
+        "props": [
+          { "name": "vendor", "value": "OpenGov" }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "d4e5f6a7-b8c9-0123-def0-234567890123",
+            "source": "catalogs/privacy.json",
+            "description": "Privacy control implementations",
+            "implemented-requirements": [
+              {
+                "uuid": "e5f6a7b8-c9d0-1234-ef01-345678901234",
+                "control-id": "GOV-01",
+                "description": "Implemented via automated governance workflow"
+              },
+              {
+                "uuid": "f6a7b8c9-d0e1-2345-f012-456789012345",
+                "control-id": "GOV-02",
+                "description": "Implemented via policy engine"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "capabilities": [
+      {
+        "uuid": "a7b8c9d0-e1f2-3456-0123-567890123456",
+        "name": "Privacy Compliance",
+        "description": "Provides privacy compliance capabilities",
+        "props": [
+          { "name": "scope", "value": "DSGVO" }
+        ]
+      }
+    ]
+  }
+}

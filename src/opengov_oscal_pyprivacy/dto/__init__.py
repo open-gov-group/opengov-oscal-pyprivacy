@@ -12,6 +12,7 @@ from .sdm import (
 from .sdm_tom import SdmTomControlSummary, SdmTomControlDetail
 from .resilience import SecurityControl, SecurityControlUpdateRequest
 from .mapping_workbench import SecurityControlRef, MappingStandards, SdmSecurityMapping
+from .mapping_coverage import MappingCoverageResult, TransitiveMappingPath
 from .ropa import (
     RopaControlSummary, RopaControlDetail,
     RopaGroupSummary, RopaGroupDetail,
@@ -34,6 +35,8 @@ __all__ = [
     "SecurityControl", "SecurityControlUpdateRequest",
     # Mapping Workbench (#6)
     "SecurityControlRef", "MappingStandards", "SdmSecurityMapping",
+    # Mapping Coverage (#43)
+    "MappingCoverageResult", "TransitiveMappingPath",
     # ROPA (#28)
     "RopaControlSummary", "RopaControlDetail",
     "RopaGroupSummary", "RopaGroupDetail",

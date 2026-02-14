@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.9.0] - 2026-02-14
+
+Phase 5: OSCAL Architecture Models — Profile, SSP, ComponentDefinition, Mapping Domain, DiffService.
+
+### Added
+
+- Models: `Profile`, `ImportRef`, `Modify` in `pycore/models_profile.py` with root-unwrap validator (#42)
+- Domain: `resolve_profile_imports()`, `build_profile_from_controls()`, `add_profile_import()` in `domain/profile.py` (#42)
+- Models: `ComponentDefinition`, `Component`, `Capability`, `ControlImplementation`, `ImplementedRequirement` in `pycore/models_component.py` (#45)
+- Models: `SystemSecurityPlan`, `SspImplementedRequirement`, `SspControlImplementation`, `SystemCharacteristics`, `ImportProfile` in `pycore/models_ssp.py` (#44)
+- Domain: `generate_implemented_requirements()`, `attach_evidence_to_ssp()`, `get_import_profile_href()` in `domain/ssp.py` (#44)
+- Domain: `list_mappings()`, `get_mapping()`, `upsert_mapping()`, `delete_mapping()`, `calculate_mapping_coverage()`, `resolve_transitive_mappings()` in `domain/mapping.py` (#43)
+- DTOs: `MappingCoverageResult`, `TransitiveMappingPath` in `dto/mapping_coverage.py` (#43)
+- Diff: `DiffChange`, `DiffSummary`, `OscalDiffResult`, `diff_oscal()`, `diff_catalogs()`, `diff_controls()` in `pycore/diff.py` (#46)
+- Service: `OscalDiffService` with `diff_files()`, `diff_catalogs()`, `format_diff_summary()` in `services/diff_service.py` (#46)
+- Optional dependency: `deepdiff>=7.0` for enhanced diff (fallback to simple dict-comparison without it) (#46)
+
+### Quality Gate (#47)
+
+- 559 tests, 97% coverage (up from 423 tests / 97%)
+- All 4 OSCAL document types supported: Catalog, Profile, ComponentDefinition, SSP
+- Import-Chain: Catalog -> Profile -> ComponentDef -> SSP
+- New test files: test_profile, test_component, test_ssp, test_diff, test_mapping_domain
+- Python 3.10-3.14 compatible
+
 ## [0.8.0] - 2026-02-14
 
 Phase 1.5: Standardisierte Codelisten-Engine — Pydantic v2 Models, CodelistRegistry, XÖV-VVT Import, i18n, Cascade Engine, OSCAL Integration.

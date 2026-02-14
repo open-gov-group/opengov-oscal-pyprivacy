@@ -60,3 +60,21 @@ from .resilience_catalog import (
     set_objective,
     set_description,
 )
+from .profile import (
+    resolve_profile_imports,
+    build_profile_from_controls,
+    add_profile_import,
+)
+from .ssp import (
+    generate_implemented_requirements,
+    attach_evidence_to_ssp,
+    get_import_profile_href,
+)
+from .mapping import (
+    list_mappings,
+    get_mapping,
+    upsert_mapping,
+    delete_mapping,
+    calculate_mapping_coverage,
+    resolve_transitive_mappings,
+)

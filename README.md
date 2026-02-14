@@ -2,7 +2,7 @@
 
 Lightweight Python toolkit for OSCAL privacy catalogs and privacy/SDM-specific conventions.
 
-**Version:** 0.8.0 | **Python:** >=3.10 | **License:** GPL-3.0-only
+**Version:** 0.9.0 | **Python:** >=3.10 | **License:** GPL-3.0-only
 
 ## Packages
 
@@ -13,6 +13,10 @@ Minimal OSCAL subset models + generic CRUD utilities.
 | Module | Purpose |
 |--------|---------|
 | `models.py` | Pydantic v2 models: `Catalog`, `Group`, `Control`, `Property`, `Part`, `Link`, `OscalMetadata`, `BackMatter`, `Resource` |
+| `models_profile.py` | OSCAL Profile: `Profile`, `ImportRef`, `Modify` with root-unwrap |
+| `models_ssp.py` | OSCAL SSP: `SystemSecurityPlan`, `SspImplementedRequirement`, `SystemCharacteristics`, `ImportProfile` |
+| `models_component.py` | OSCAL ComponentDef: `ComponentDefinition`, `Component`, `Capability`, `ControlImplementation` |
+| `diff.py` | OSCAL-aware diff: `diff_oscal()`, `diff_catalogs()`, `diff_controls()` (deepdiff or fallback) |
 | `crud/props.py` | Property CRUD: `list_props`, `find_props`, `get_prop`, `upsert_prop`, `remove_props` |
 | `crud/parts.py` | Part CRUD (Mixed-Mode: Part models + dicts): `parts_ref`, `find_part`, `ensure_part_container`, `add_child_part`, ... |
 | `crud/links.py` | Link CRUD: `list_links`, `find_links`, `get_link`, `upsert_link`, `remove_links` |
@@ -35,9 +39,14 @@ Privacy/SDM helpers, domain modules, CSV-backed vocabularies, and DTOs.
 | `vocab.py` | CSV-backed vocabulary loading (assurance goals, measures, maturity, ...) |
 | `legal_adapter.py` | Legal reference normalization (integrates with opengov-pylegal-utils) |
 | `domain/query.py` | Query helpers: `find_controls_by_tom_id`, `find_controls_by_legal_article` |
+| `domain/profile.py` | Profile operations: `resolve_profile_imports()`, `build_profile_from_controls()` |
+| `domain/ssp.py` | SSP operations: `generate_implemented_requirements()`, `attach_evidence_to_ssp()` |
+| `domain/mapping.py` | Mapping CRUD + Coverage: `calculate_mapping_coverage()`, `resolve_transitive_mappings()` |
 | `converters/` | DTO factory functions: Control/Group -> DTO in one call |
 | `dto/ropa.py` | ROPA DTOs: RopaControlSummary, RopaControlDetail, RopaGroupSummary, RopaGroupDetail |
 | `dto/dpia.py` | DPIA DTOs: DpiaControlSummary, DpiaControlDetail, DpiaGroupSummary, DpiaGroupDetail |
+| `dto/mapping_coverage.py` | Coverage DTOs: MappingCoverageResult, TransitiveMappingPath |
+| `services/diff_service.py` | `OscalDiffService`: file/catalog/control diff with human-readable output |
 | `catalog_keys.py` | Constants for property/group/class patterns |
 | `codelist/models.py` | Codelist, CodeEntry, CodeLabel, CascadeRule — strict Pydantic models |
 | `codelist/registry.py` | CodelistRegistry: central registry with validate, search, load_defaults |
@@ -187,6 +196,44 @@ print(registry.validate_code("data-categories", "health-data"))  # True
 print(registry.get_label("data-categories", "health-data", "de"))  # "Gesundheitsdaten"
 ```
 
+### Profile + SSP (v0.9.0)
+
+```python
+from opengov_oscal_pycore import Profile, SystemSecurityPlan, ComponentDefinition
+
+# Load OSCAL Profile
+profile = Profile.model_validate(json.load(open("profile.json")))
+print(profile.imports[0].href)  # "catalogs/privacy.json"
+
+# Resolve profile imports into a flat catalog
+from opengov_oscal_pyprivacy import resolve_profile_imports
+resolved = resolve_profile_imports(profile, catalog_loader=my_loader)
+
+# Generate SSP stubs from resolved catalog
+from opengov_oscal_pyprivacy import generate_implemented_requirements
+irs = generate_implemented_requirements(resolved)
+```
+
+### Mapping Coverage (v0.9.0)
+
+```python
+from opengov_oscal_pyprivacy import calculate_mapping_coverage
+
+coverage = calculate_mapping_coverage(catalog, mapping_data)
+print(f"{coverage.coverage_percent}% mapped")
+print(f"Unmapped: {coverage.unmapped_control_ids}")
+```
+
+### OSCAL Diff (v0.9.0)
+
+```python
+from opengov_oscal_pyprivacy import OscalDiffService
+
+svc = OscalDiffService(ignore_paths=["metadata.last-modified"])
+result = svc.diff_catalogs(old_catalog, new_catalog)
+print(svc.format_diff_summary(result))
+```
+
 ### Cascade Compliance (v0.8.0)
 
 ```python
@@ -211,7 +258,7 @@ scenarios = get_risk_impact_scenarios(control)
 ## Development
 
 ```bash
-pytest                    # run tests (423 tests)
+pytest                    # run tests (559 tests)
 pytest --tb=short -v      # verbose
 coverage run -m pytest    # with coverage (97%)
 ```

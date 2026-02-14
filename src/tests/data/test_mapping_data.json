@@ -1,0 +1,58 @@
+[
+  {
+    "sdmControlId": "GOV-01",
+    "sdmTitle": "Governance Framework",
+    "securityControls": [
+      {"catalogId": "iso27001", "controlId": "A.5.1"}
+    ],
+    "standards": {
+      "bsi": ["OPS.1.1"],
+      "iso27001": ["A.5.1", "A.5.2"],
+      "iso27701": null
+    },
+    "notes": "Core governance control"
+  },
+  {
+    "sdmControlId": "GOV-02",
+    "sdmTitle": "Policy Management",
+    "securityControls": [],
+    "standards": {
+      "bsi": null,
+      "iso27001": ["A.5.1"],
+      "iso27701": ["7.2.1"]
+    }
+  },
+  {
+    "sdmControlId": "GOV-03",
+    "sdmTitle": "Role Assignments",
+    "securityControls": [
+      {"catalogId": "iso27001", "controlId": "A.6.1"}
+    ],
+    "standards": {
+      "bsi": ["ORP.1"],
+      "iso27001": null,
+      "iso27701": null
+    }
+  },
+  {
+    "sdmControlId": "GOV-04",
+    "sdmTitle": "Training and Awareness",
+    "securityControls": [],
+    "standards": {
+      "bsi": null,
+      "iso27001": null,
+      "iso27701": null
+    },
+    "notes": "Unmapped placeholder"
+  },
+  {
+    "sdmControlId": "A.5.1",
+    "sdmTitle": "Information Security Policy",
+    "securityControls": [],
+    "standards": {
+      "bsi": ["ORP.1"],
+      "iso27001": ["A.5.1"],
+      "iso27701": null
+    }
+  }
+]

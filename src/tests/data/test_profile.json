@@ -1,0 +1,38 @@
+{
+  "profile": {
+    "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "metadata": {
+      "title": "Test Privacy Profile",
+      "last-modified": "2026-01-01T00:00:00Z",
+      "version": "1.0.0",
+      "oscal-version": "1.1.2"
+    },
+    "imports": [
+      {
+        "href": "catalogs/privacy.json",
+        "include-controls": [
+          { "with-ids": ["GOV-01", "GOV-02", "GOV-03"] }
+        ]
+      }
+    ],
+    "merge": {
+      "as-is": true
+    },
+    "modify": {
+      "set-parameters": [],
+      "alters": [
+        {
+          "control-id": "GOV-01",
+          "adds": [
+            {
+              "position": "ending",
+              "props": [
+                {"name": "priority", "value": "high"}
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
