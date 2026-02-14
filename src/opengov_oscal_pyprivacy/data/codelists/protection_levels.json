@@ -1,0 +1,12 @@
+{
+  "list_id": "protection-levels",
+  "version": "1.0.0",
+  "namespace_uri": "urn:opengov:codelist:protection-levels",
+  "title": {"en": "Protection Levels", "de": "Schutzniveaus"},
+  "source": "pyprivacy",
+  "entries": [
+    {"code": "baseline", "labels": {"en": "Baseline", "de": "Basis"}, "sort_order": 1},
+    {"code": "standard", "labels": {"en": "Standard", "de": "Standard"}, "sort_order": 2},
+    {"code": "enhanced", "labels": {"en": "Enhanced", "de": "Erhöht"}, "sort_order": 3}
+  ]
+}

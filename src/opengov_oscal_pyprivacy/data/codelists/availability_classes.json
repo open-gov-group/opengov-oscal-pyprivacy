@@ -1,0 +1,14 @@
+{
+  "list_id": "availability-classes",
+  "version": "2.0.0",
+  "namespace_uri": "urn:opengov:codelist:availability-classes",
+  "title": {"en": "Availability Classes", "de": "Verfügbarkeitsklassen"},
+  "source": "XÖV-VVT v2.0.0",
+  "entries": [
+    {"code": "class-0", "labels": {"en": "No availability requirements", "de": "Keine Verfügbarkeitsanforderungen"}, "xoev_code": "klasse0", "metadata": {"group": "availability"}, "sort_order": 1},
+    {"code": "class-1", "labels": {"en": "Normal availability", "de": "Normale Verfügbarkeit"}, "xoev_code": "klasse1", "metadata": {"group": "availability"}, "sort_order": 2},
+    {"code": "class-2", "labels": {"en": "Extended availability", "de": "Erweiterte Verfügbarkeit"}, "xoev_code": "klasse2", "metadata": {"group": "availability"}, "sort_order": 3},
+    {"code": "class-3", "labels": {"en": "High availability", "de": "Hohe Verfügbarkeit"}, "xoev_code": "klasse3", "metadata": {"group": "availability"}, "sort_order": 4},
+    {"code": "class-4", "labels": {"en": "Very high availability", "de": "Sehr hohe Verfügbarkeit"}, "xoev_code": "klasse4", "metadata": {"group": "availability"}, "sort_order": 5}
+  ]
+}

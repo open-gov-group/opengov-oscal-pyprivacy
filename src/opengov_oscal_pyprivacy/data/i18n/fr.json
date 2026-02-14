@@ -1,0 +1,30 @@
+{
+  "data-categories": {
+    "master-data": {
+      "label": "Données de base",
+      "definition": "Données d'identité générales"
+    },
+    "contact-data": {
+      "label": "Données de contact"
+    },
+    "health-data": {
+      "label": "Données de santé",
+      "definition": "Données relatives à la santé physique ou mentale"
+    },
+    "criminal-data": {
+      "label": "Données pénales",
+      "definition": "Condamnations pénales et infractions"
+    }
+  },
+  "protection-levels": {
+    "baseline": {
+      "label": "Base"
+    },
+    "standard": {
+      "label": "Standard"
+    },
+    "enhanced": {
+      "label": "Renforcé"
+    }
+  }
+}

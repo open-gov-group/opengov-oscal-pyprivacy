@@ -1,0 +1,67 @@
+[
+  {
+    "rule_id": "special-category-requires-enhanced",
+    "source_list": "data-categories",
+    "source_field": "metadata.group",
+    "condition": "== 'special'",
+    "effects": [
+      {
+        "target_list": "protection-levels",
+        "target_field": "minimum_level",
+        "operator": "set_minimum",
+        "value": "enhanced",
+        "description": {"en": "Special category data (Art. 9) requires enhanced protection level", "de": "Besondere Kategorien (Art. 9) erfordern erhöhtes Schutzniveau"}
+      },
+      {
+        "target_list": "dpia",
+        "target_field": "required",
+        "operator": "require",
+        "value": "true",
+        "description": {"en": "DPIA required for special category data", "de": "DSFA erforderlich für besondere Kategorien"}
+      }
+    ],
+    "priority": 10,
+    "description": {"en": "Special category data triggers enhanced protection and DPIA", "de": "Besondere Datenkategorien lösen erhöhten Schutz und DSFA aus"}
+  },
+  {
+    "rule_id": "criminal-data-requires-national-law",
+    "source_list": "data-categories",
+    "source_field": "metadata.group",
+    "condition": "== 'criminal'",
+    "effects": [
+      {
+        "target_list": "protection-levels",
+        "target_field": "minimum_level",
+        "operator": "set_minimum",
+        "value": "enhanced",
+        "description": {"en": "Criminal data (Art. 10) requires enhanced protection", "de": "Strafdaten (Art. 10) erfordern erhöhtes Schutzniveau"}
+      },
+      {
+        "target_list": "legal-instruments",
+        "target_field": "required_basis",
+        "operator": "require",
+        "value": "national-law",
+        "description": {"en": "Criminal data requires national law as legal basis (Art. 10)", "de": "Strafdaten erfordern nationales Recht als Rechtsgrundlage (Art. 10)"}
+      }
+    ],
+    "priority": 10,
+    "description": {"en": "Criminal data triggers national law requirement", "de": "Strafdaten erfordern nationales Recht"}
+  },
+  {
+    "rule_id": "health-data-enhanced-crypto",
+    "source_list": "data-categories",
+    "source_field": "metadata.group",
+    "condition": "== 'special'",
+    "effects": [
+      {
+        "target_list": "crypto-methods",
+        "target_field": "minimum_encryption",
+        "operator": "set_minimum",
+        "value": "aes-256",
+        "description": {"en": "Special category data requires AES-256 encryption minimum", "de": "Besondere Kategorien erfordern mindestens AES-256 Verschlüsselung"}
+      }
+    ],
+    "priority": 20,
+    "description": {"en": "Special category data requires strong encryption", "de": "Besondere Kategorien erfordern starke Verschlüsselung"}
+  }
+]

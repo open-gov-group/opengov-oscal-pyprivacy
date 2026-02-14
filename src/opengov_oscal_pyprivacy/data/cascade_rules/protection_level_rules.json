@@ -1,0 +1,26 @@
+[
+  {
+    "rule_id": "enhanced-requires-mfa",
+    "source_list": "protection-levels",
+    "source_field": "code",
+    "condition": "== 'enhanced'",
+    "effects": [
+      {
+        "target_list": "auth-methods",
+        "target_field": "minimum_auth",
+        "operator": "set_minimum",
+        "value": "mfa",
+        "description": {"en": "Enhanced protection requires multi-factor authentication", "de": "Erhöhtes Schutzniveau erfordert Multi-Faktor-Authentifizierung"}
+      },
+      {
+        "target_list": "availability-classes",
+        "target_field": "minimum_class",
+        "operator": "set_minimum",
+        "value": "class-2",
+        "description": {"en": "Enhanced protection requires at least availability class 2", "de": "Erhöhtes Schutzniveau erfordert mindestens Verfügbarkeitsklasse 2"}
+      }
+    ],
+    "priority": 10,
+    "description": {"en": "Enhanced protection level imposes auth and availability requirements", "de": "Erhöhtes Schutzniveau bedingt Auth- und Verfügbarkeitsanforderungen"}
+  }
+]

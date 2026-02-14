@@ -2,7 +2,7 @@
 
 Lightweight Python toolkit for OSCAL privacy catalogs and privacy/SDM-specific conventions.
 
-**Version:** 0.7.0 | **Python:** >=3.10 | **License:** GPL-3.0-only
+**Version:** 0.8.0 | **Python:** >=3.10 | **License:** GPL-3.0-only
 
 ## Packages
 
@@ -39,6 +39,11 @@ Privacy/SDM helpers, domain modules, CSV-backed vocabularies, and DTOs.
 | `dto/ropa.py` | ROPA DTOs: RopaControlSummary, RopaControlDetail, RopaGroupSummary, RopaGroupDetail |
 | `dto/dpia.py` | DPIA DTOs: DpiaControlSummary, DpiaControlDetail, DpiaGroupSummary, DpiaGroupDetail |
 | `catalog_keys.py` | Constants for property/group/class patterns |
+| `codelist/models.py` | Codelist, CodeEntry, CodeLabel, CascadeRule — strict Pydantic models |
+| `codelist/registry.py` | CodelistRegistry: central registry with validate, search, load_defaults |
+| `codelist/i18n.py` | TranslationOverlay: multilingual label resolution (EN/DE/FR) |
+| `codelist/cascade.py` | CascadeService: cascading compliance impacts on data category changes |
+| `codelist/export/` | Genericode 1.0 XML export + OSCAL Props integration |
 
 ## Installation
 
@@ -172,6 +177,27 @@ print(detail.maturity_domain)      # "risk-management"
 print(detail.measure_category)     # "process"
 ```
 
+### Codelist Registry (v0.8.0)
+
+```python
+from opengov_oscal_pyprivacy.codelist import CodelistRegistry
+
+registry = CodelistRegistry.load_defaults()
+print(registry.validate_code("data-categories", "health-data"))  # True
+print(registry.get_label("data-categories", "health-data", "de"))  # "Gesundheitsdaten"
+```
+
+### Cascade Compliance (v0.8.0)
+
+```python
+from opengov_oscal_pyprivacy.codelist import CascadeService
+
+cascade = CascadeService.load_defaults()
+impacts = cascade.suggest_changes("contact-data", "health-data")
+for i in impacts:
+    print(f"[{i.severity}] {i.description}")
+```
+
 ### Risk impact scenarios
 ```python
 from opengov_oscal_pyprivacy import (
@@ -185,7 +211,7 @@ scenarios = get_risk_impact_scenarios(control)
 ## Development
 
 ```bash
-pytest                    # run tests (295 tests)
+pytest                    # run tests (423 tests)
 pytest --tb=short -v      # verbose
 coverage run -m pytest    # with coverage (97%)
 ```

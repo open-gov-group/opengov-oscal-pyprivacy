@@ -1,0 +1,19 @@
+{
+  "list_id": "legal-instruments",
+  "version": "2.0.0",
+  "namespace_uri": "urn:opengov:codelist:legal-instruments",
+  "title": {"en": "Legal Instruments", "de": "Rechtsinstrumente"},
+  "source": "XÖV-VVT v2.0.0",
+  "entries": [
+    {"code": "consent", "labels": {"en": "Consent (Art. 6(1)(a))", "de": "Einwilligung"}, "xoev_code": "einwilligung", "metadata": {"gdpr_article": "Art. 6(1)(a)"}, "sort_order": 1},
+    {"code": "contract", "labels": {"en": "Contract performance (Art. 6(1)(b))", "de": "Vertragserfüllung"}, "xoev_code": "vertrag", "metadata": {"gdpr_article": "Art. 6(1)(b)"}, "sort_order": 2},
+    {"code": "legal-obligation", "labels": {"en": "Legal obligation (Art. 6(1)(c))", "de": "Rechtliche Verpflichtung"}, "xoev_code": "rechtspflicht", "metadata": {"gdpr_article": "Art. 6(1)(c)"}, "sort_order": 3},
+    {"code": "vital-interest", "labels": {"en": "Vital interests (Art. 6(1)(d))", "de": "Lebenswichtige Interessen"}, "xoev_code": "lebenswichtig", "metadata": {"gdpr_article": "Art. 6(1)(d)"}, "sort_order": 4},
+    {"code": "public-interest", "labels": {"en": "Public interest (Art. 6(1)(e))", "de": "Öffentliches Interesse"}, "xoev_code": "oeffentlich", "metadata": {"gdpr_article": "Art. 6(1)(e)"}, "sort_order": 5},
+    {"code": "legitimate-interest", "labels": {"en": "Legitimate interests (Art. 6(1)(f))", "de": "Berechtigtes Interesse"}, "xoev_code": "berechtigt", "metadata": {"gdpr_article": "Art. 6(1)(f)"}, "sort_order": 6},
+    {"code": "explicit-consent-special", "labels": {"en": "Explicit consent for special categories (Art. 9(2)(a))", "de": "Ausdrückliche Einwilligung (besondere Kategorien)"}, "xoev_code": "einwilligung_besonders", "metadata": {"gdpr_article": "Art. 9(2)(a)"}, "sort_order": 7},
+    {"code": "national-law", "labels": {"en": "National law (Art. 10)", "de": "Nationales Recht"}, "xoev_code": "nationales_recht", "metadata": {"gdpr_article": "Art. 10"}, "sort_order": 8},
+    {"code": "scc", "labels": {"en": "Standard Contractual Clauses (SCC)", "de": "Standardvertragsklauseln"}, "xoev_code": "scc", "metadata": {"gdpr_article": "Art. 46(2)(c)"}, "sort_order": 9},
+    {"code": "bcr", "labels": {"en": "Binding Corporate Rules (BCR)", "de": "Verbindliche unternehmensinterne Vorschriften"}, "xoev_code": "bcr", "metadata": {"gdpr_article": "Art. 47"}, "sort_order": 10}
+  ]
+}

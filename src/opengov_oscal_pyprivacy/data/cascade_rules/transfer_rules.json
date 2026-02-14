@@ -1,0 +1,19 @@
+[
+  {
+    "rule_id": "third-country-requires-scc",
+    "source_list": "recipients",
+    "source_field": "metadata.group",
+    "condition": "== 'international'",
+    "effects": [
+      {
+        "target_list": "legal-instruments",
+        "target_field": "transfer_instrument",
+        "operator": "require",
+        "value": "scc",
+        "description": {"en": "Third-country transfers require SCC or BCR (Art. 44-49)", "de": "Drittlandübermittlungen erfordern SCC oder BCR (Art. 44-49)"}
+      }
+    ],
+    "priority": 10,
+    "description": {"en": "International recipients require transfer safeguards", "de": "Internationale Empfänger erfordern Übermittlungsgarantien"}
+  }
+]

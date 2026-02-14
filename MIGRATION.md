@@ -1,4 +1,4 @@
-# Migration Guide: pyprivacy v0.3.0 -> v0.7.0
+# Migration Guide: pyprivacy v0.3.0 -> v0.8.0
 
 ## 1. Update Dependency
 
@@ -360,4 +360,47 @@ from opengov_oscal_pyprivacy import (
 - [ ] All existing service tests pass
 - [ ] New tests for migrated functions
 - [ ] Manual smoke test in Workbench UI
+```
+
+## 14. Codelist Engine (v0.8.0)
+
+v0.8.0 adds a comprehensive Codelist Engine for standardized privacy vocabularies.
+
+### CodelistRegistry
+
+```python
+from opengov_oscal_pyprivacy.codelist import CodelistRegistry
+
+registry = CodelistRegistry.load_defaults()
+registry.validate_code("data-categories", "health-data")  # True
+registry.get_label("data-categories", "health-data", "de")  # "Gesundheitsdaten"
+registry.search("data-categories", "health")  # [CodeEntry(...)]
+```
+
+### CascadeService
+
+```python
+from opengov_oscal_pyprivacy.codelist import CascadeService
+
+cascade = CascadeService.load_defaults()
+impacts = cascade.evaluate_impact("health-data", current_protection_level="baseline")
+# Returns: enhanced protection required, DPIA required, AES-256 required
+```
+
+### OSCAL Props Integration
+
+```python
+from opengov_oscal_pyprivacy.codelist import create_codelist_prop, validate_codelist_props
+
+prop = create_codelist_prop("data-categories", "health-data")
+issues = validate_codelist_props(catalog, registry)
+```
+
+### i18n Overlays
+
+```python
+from opengov_oscal_pyprivacy.codelist import TranslationOverlay
+
+overlay = TranslationOverlay.load_defaults()
+overlay.get_label("data-categories", "health-data", "fr")  # "Données de santé"
 ```

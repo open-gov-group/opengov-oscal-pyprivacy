@@ -1,0 +1,12 @@
+{
+  "list_id": "evidence-types",
+  "version": "1.0.0",
+  "namespace_uri": "urn:opengov:codelist:evidence-types",
+  "title": {"en": "Evidence Types", "de": "Nachweistypen"},
+  "entries": [
+    {"code": "policy", "labels": {"en": "Policy", "de": "Policy"}, "sort_order": 1},
+    {"code": "procedure", "labels": {"en": "Procedure", "de": "Verfahren"}, "sort_order": 2},
+    {"code": "record", "labels": {"en": "Record", "de": "Nachweis"}, "sort_order": 3},
+    {"code": "report", "labels": {"en": "Report", "de": "Bericht"}, "sort_order": 4}
+  ]
+}

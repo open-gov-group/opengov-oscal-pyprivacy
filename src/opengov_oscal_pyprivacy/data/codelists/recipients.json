@@ -1,0 +1,17 @@
+{
+  "list_id": "recipients",
+  "version": "2.0.0",
+  "namespace_uri": "urn:opengov:codelist:recipients",
+  "title": {"en": "Recipients", "de": "Empfänger"},
+  "source": "XÖV-VVT v2.0.0",
+  "entries": [
+    {"code": "internal-department", "labels": {"en": "Internal department", "de": "Interne Fachabteilung"}, "xoev_code": "intern", "metadata": {"group": "internal"}, "sort_order": 1},
+    {"code": "processor", "labels": {"en": "Data processor (Art. 28)", "de": "Auftragsverarbeiter"}, "xoev_code": "auftragsverarbeiter", "metadata": {"group": "external", "gdpr_article": "Art. 28"}, "sort_order": 2},
+    {"code": "joint-controller", "labels": {"en": "Joint controller (Art. 26)", "de": "Gemeinsam Verantwortlicher"}, "xoev_code": "gemeinsam_verantwortlich", "metadata": {"group": "external", "gdpr_article": "Art. 26"}, "sort_order": 3},
+    {"code": "public-authority", "labels": {"en": "Public authority", "de": "Öffentliche Stelle"}, "xoev_code": "behoerde", "metadata": {"group": "external"}, "sort_order": 4},
+    {"code": "third-country", "labels": {"en": "Third country recipient", "de": "Drittlandempfänger"}, "xoev_code": "drittland", "metadata": {"group": "international", "gdpr_article": "Art. 44-49"}, "sort_order": 5},
+    {"code": "international-org", "labels": {"en": "International organization", "de": "Internationale Organisation"}, "xoev_code": "internationale_org", "metadata": {"group": "international", "gdpr_article": "Art. 44-49"}, "sort_order": 6},
+    {"code": "insurance", "labels": {"en": "Insurance company", "de": "Versicherung"}, "xoev_code": "versicherung", "metadata": {"group": "external"}, "sort_order": 7},
+    {"code": "tax-authority", "labels": {"en": "Tax authority", "de": "Finanzbehörde"}, "xoev_code": "finanzbehoerde", "metadata": {"group": "external"}, "sort_order": 8}
+  ]
+}

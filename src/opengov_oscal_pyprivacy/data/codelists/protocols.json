@@ -1,0 +1,17 @@
+{
+  "list_id": "protocols",
+  "version": "2.0.0",
+  "namespace_uri": "urn:opengov:codelist:protocols",
+  "title": {"en": "Communication Protocols", "de": "Kommunikationsprotokolle"},
+  "source": "XÖV-VVT v2.0.0",
+  "entries": [
+    {"code": "https", "labels": {"en": "HTTPS (TLS-encrypted HTTP)", "de": "HTTPS (TLS-verschlüsseltes HTTP)"}, "xoev_code": "https", "metadata": {"group": "web"}, "sort_order": 1},
+    {"code": "sftp", "labels": {"en": "SFTP (SSH File Transfer Protocol)", "de": "SFTP (SSH-Dateiübertragung)"}, "xoev_code": "sftp", "metadata": {"group": "file-transfer"}, "sort_order": 2},
+    {"code": "ssh", "labels": {"en": "SSH (Secure Shell)", "de": "SSH (Secure Shell)"}, "xoev_code": "ssh", "metadata": {"group": "remote-access"}, "sort_order": 3},
+    {"code": "smtp-tls", "labels": {"en": "SMTP with TLS (encrypted email)", "de": "SMTP mit TLS (verschlüsselte E-Mail)"}, "xoev_code": "smtp_tls", "metadata": {"group": "email"}, "sort_order": 4},
+    {"code": "vpn-ipsec", "labels": {"en": "VPN with IPsec", "de": "VPN mit IPsec"}, "xoev_code": "vpn_ipsec", "metadata": {"group": "tunnel"}, "sort_order": 5},
+    {"code": "ldaps", "labels": {"en": "LDAPS (LDAP over TLS)", "de": "LDAPS (LDAP über TLS)"}, "xoev_code": "ldaps", "metadata": {"group": "directory"}, "sort_order": 6},
+    {"code": "oauth2-flow", "labels": {"en": "OAuth 2.0 authorization flow", "de": "OAuth 2.0 Autorisierungsablauf"}, "xoev_code": "oauth2", "metadata": {"group": "auth"}, "sort_order": 7},
+    {"code": "api-rest", "labels": {"en": "RESTful API (HTTPS-based)", "de": "RESTful API (HTTPS-basiert)"}, "xoev_code": "rest_api", "metadata": {"group": "web"}, "sort_order": 8}
+  ]
+}

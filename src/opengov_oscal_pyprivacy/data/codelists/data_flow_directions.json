@@ -1,0 +1,13 @@
+{
+  "list_id": "data-flow-directions",
+  "version": "2.0.0",
+  "namespace_uri": "urn:opengov:codelist:data-flow-directions",
+  "title": {"en": "Data Flow Directions", "de": "Datenflussrichtungen"},
+  "source": "XÖV-VVT v2.0.0",
+  "entries": [
+    {"code": "inbound", "labels": {"en": "Inbound (data received)", "de": "Eingehend (Datenempfang)"}, "xoev_code": "eingehend", "sort_order": 1},
+    {"code": "outbound", "labels": {"en": "Outbound (data sent)", "de": "Ausgehend (Datenversand)"}, "xoev_code": "ausgehend", "sort_order": 2},
+    {"code": "bidirectional", "labels": {"en": "Bidirectional (data exchanged)", "de": "Bidirektional (Datenaustausch)"}, "xoev_code": "bidirektional", "sort_order": 3},
+    {"code": "internal", "labels": {"en": "Internal (within organization)", "de": "Intern (innerhalb der Organisation)"}, "xoev_code": "intern", "sort_order": 4}
+  ]
+}

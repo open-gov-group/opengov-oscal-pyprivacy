@@ -1,0 +1,13 @@
+{
+  "list_id": "mapping-schemes",
+  "version": "1.0.0",
+  "namespace_uri": "urn:opengov:codelist:mapping-schemes",
+  "title": {"en": "Mapping Schemes", "de": "Zuordnungsschemata"},
+  "entries": [
+    {"code": "sdm", "labels": {"en": "SDM (Standard Data Protection Model)", "de": "SDM (Standard-Datenschutzmodell)"}, "sort_order": 1},
+    {"code": "iso27001", "labels": {"en": "ISO/IEC 27001", "de": "ISO/IEC 27001"}, "sort_order": 2},
+    {"code": "bsi_itgrundschutz", "labels": {"en": "BSI IT-Grundschutz", "de": "BSI IT-Grundschutz"}, "sort_order": 3},
+    {"code": "nist800-53", "labels": {"en": "NIST SP 800-53", "de": "NIST SP 800-53"}, "sort_order": 4},
+    {"code": "custom", "labels": {"en": "Custom", "de": "Benutzerdefiniert"}, "sort_order": 5}
+  ]
+}

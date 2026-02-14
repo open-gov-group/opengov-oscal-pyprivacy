@@ -1,0 +1,11 @@
+{
+  "list_id": "maturity-domains",
+  "version": "1.0.0",
+  "namespace_uri": "urn:opengov:codelist:maturity-domains",
+  "title": {"en": "Maturity Domains", "de": "Reifegradbereiche"},
+  "entries": [
+    {"code": "governance", "labels": {"en": "Governance", "de": "Governance"}, "sort_order": 1},
+    {"code": "risk", "labels": {"en": "Risk", "de": "Risiko"}, "sort_order": 2},
+    {"code": "process", "labels": {"en": "Process", "de": "Prozess"}, "sort_order": 3}
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "list_id": "assurance-goals",
+  "version": "1.0.0",
+  "namespace_uri": "urn:opengov:codelist:assurance-goals",
+  "title": {"en": "Assurance Goals", "de": "Gewährleistungsziele"},
+  "source": "SDM (Standard-Datenschutzmodell)",
+  "entries": [
+    {"code": "transparency", "labels": {"en": "Transparency", "de": "Transparenz"}, "sort_order": 1},
+    {"code": "intervenability", "labels": {"en": "Intervenability", "de": "Intervenierbarkeit"}, "sort_order": 2},
+    {"code": "unlinkability", "labels": {"en": "Unlinkability", "de": "Unverkettbarkeit"}, "sort_order": 3},
+    {"code": "confidentiality", "labels": {"en": "Confidentiality", "de": "Vertraulichkeit"}, "sort_order": 4},
+    {"code": "integrity", "labels": {"en": "Integrity", "de": "Integrität"}, "sort_order": 5},
+    {"code": "availability", "labels": {"en": "Availability", "de": "Verfügbarkeit"}, "sort_order": 6},
+    {"code": "data_minimization", "labels": {"en": "Data Minimization", "de": "Datenminimierung"}, "sort_order": 7}
+  ]
+}

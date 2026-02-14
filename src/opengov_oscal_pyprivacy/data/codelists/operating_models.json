@@ -1,0 +1,15 @@
+{
+  "list_id": "operating-models",
+  "version": "2.0.0",
+  "namespace_uri": "urn:opengov:codelist:operating-models",
+  "title": {"en": "Operating Models", "de": "Betriebsmodelle"},
+  "source": "XÖV-VVT v2.0.0",
+  "entries": [
+    {"code": "self-operated", "labels": {"en": "Self-operated", "de": "Eigenbetrieb"}, "xoev_code": "eigenbetrieb", "metadata": {"group": "internal"}, "sort_order": 1},
+    {"code": "hosted-eu", "labels": {"en": "Hosted in EU/EEA", "de": "Gehostet in EU/EWR"}, "xoev_code": "hosting_eu", "metadata": {"group": "hosted", "gdpr_article": "Art. 28"}, "sort_order": 2},
+    {"code": "hosted-non-eu", "labels": {"en": "Hosted outside EU/EEA", "de": "Gehostet außerhalb EU/EWR"}, "xoev_code": "hosting_drittland", "metadata": {"group": "hosted", "gdpr_article": "Art. 44-49"}, "sort_order": 3},
+    {"code": "saas-eu", "labels": {"en": "SaaS in EU/EEA", "de": "SaaS in EU/EWR"}, "xoev_code": "saas_eu", "metadata": {"group": "saas", "gdpr_article": "Art. 28"}, "sort_order": 4},
+    {"code": "saas-non-eu", "labels": {"en": "SaaS outside EU/EEA", "de": "SaaS außerhalb EU/EWR"}, "xoev_code": "saas_drittland", "metadata": {"group": "saas", "gdpr_article": "Art. 44-49"}, "sort_order": 5},
+    {"code": "hybrid", "labels": {"en": "Hybrid operation", "de": "Hybridbetrieb"}, "xoev_code": "hybrid", "metadata": {"group": "hybrid"}, "sort_order": 6}
+  ]
+}

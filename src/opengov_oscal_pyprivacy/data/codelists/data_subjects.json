@@ -1,0 +1,19 @@
+{
+  "list_id": "data-subjects",
+  "version": "2.0.0",
+  "namespace_uri": "urn:opengov:codelist:data-subjects",
+  "title": {"en": "Data Subjects", "de": "Betroffene Personen"},
+  "source": "XÖV-VVT v2.0.0",
+  "entries": [
+    {"code": "employees", "labels": {"en": "Employees", "de": "Beschäftigte"}, "xoev_code": "beschaeftigte", "sort_order": 1},
+    {"code": "applicants", "labels": {"en": "Applicants", "de": "Bewerber"}, "xoev_code": "bewerber", "sort_order": 2},
+    {"code": "citizens", "labels": {"en": "Citizens", "de": "Bürger"}, "xoev_code": "buerger", "sort_order": 3},
+    {"code": "customers", "labels": {"en": "Customers / Clients", "de": "Kunden"}, "xoev_code": "kunden", "sort_order": 4},
+    {"code": "patients", "labels": {"en": "Patients", "de": "Patienten"}, "xoev_code": "patienten", "sort_order": 5},
+    {"code": "students", "labels": {"en": "Students / Pupils", "de": "Schüler/Studierende"}, "xoev_code": "schueler", "sort_order": 6},
+    {"code": "minors", "labels": {"en": "Minors", "de": "Minderjährige"}, "xoev_code": "minderjaehrige", "metadata": {"gdpr_article": "Art. 8"}, "sort_order": 7},
+    {"code": "suppliers", "labels": {"en": "Suppliers / Contractors", "de": "Lieferanten/Auftragnehmer"}, "xoev_code": "lieferanten", "sort_order": 8},
+    {"code": "visitors", "labels": {"en": "Visitors", "de": "Besucher"}, "xoev_code": "besucher", "sort_order": 9},
+    {"code": "members", "labels": {"en": "Members", "de": "Mitglieder"}, "xoev_code": "mitglieder", "sort_order": 10}
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "list_id": "maturity-levels",
+  "version": "1.0.0",
+  "namespace_uri": "urn:opengov:codelist:maturity-levels",
+  "title": {"en": "Maturity Levels", "de": "Reifegradstufen"},
+  "entries": [
+    {"code": "1", "labels": {"en": "Level 1", "de": "Stufe 1"}, "sort_order": 1},
+    {"code": "2", "labels": {"en": "Level 2", "de": "Stufe 2"}, "sort_order": 2},
+    {"code": "3", "labels": {"en": "Level 3", "de": "Stufe 3"}, "sort_order": 3},
+    {"code": "4", "labels": {"en": "Level 4", "de": "Stufe 4"}, "sort_order": 4},
+    {"code": "5", "labels": {"en": "Level 5", "de": "Stufe 5"}, "sort_order": 5}
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "list_id": "crypto-methods",
+  "version": "2.0.0",
+  "namespace_uri": "urn:opengov:codelist:crypto-methods",
+  "title": {"en": "Cryptographic Methods", "de": "Kryptographische Verfahren"},
+  "source": "XÖV-VVT v2.0.0",
+  "entries": [
+    {"code": "aes-256", "labels": {"en": "AES-256 symmetric encryption", "de": "AES-256 symmetrische Verschlüsselung"}, "xoev_code": "aes256", "metadata": {"group": "symmetric"}, "sort_order": 1},
+    {"code": "rsa-2048", "labels": {"en": "RSA-2048 asymmetric encryption", "de": "RSA-2048 asymmetrische Verschlüsselung"}, "xoev_code": "rsa2048", "metadata": {"group": "asymmetric"}, "sort_order": 2},
+    {"code": "tls-1-3", "labels": {"en": "TLS 1.3 transport encryption", "de": "TLS 1.3 Transportverschlüsselung"}, "xoev_code": "tls13", "metadata": {"group": "transport"}, "sort_order": 3},
+    {"code": "sha-256", "labels": {"en": "SHA-256 hash function", "de": "SHA-256 Hashfunktion"}, "xoev_code": "sha256", "metadata": {"group": "hashing"}, "sort_order": 4},
+    {"code": "ecdsa", "labels": {"en": "ECDSA elliptic curve signature", "de": "ECDSA Elliptische-Kurven-Signatur"}, "xoev_code": "ecdsa", "metadata": {"group": "signature"}, "sort_order": 5},
+    {"code": "homomorphic", "labels": {"en": "Homomorphic encryption", "de": "Homomorphe Verschlüsselung"}, "xoev_code": "homomorph", "metadata": {"group": "advanced"}, "sort_order": 6},
+    {"code": "bcrypt", "labels": {"en": "bcrypt password hashing", "de": "bcrypt Passwort-Hashing"}, "xoev_code": "bcrypt", "metadata": {"group": "hashing"}, "sort_order": 7},
+    {"code": "argon2", "labels": {"en": "Argon2 password hashing", "de": "Argon2 Passwort-Hashing"}, "xoev_code": "argon2", "metadata": {"group": "hashing"}, "sort_order": 8}
+  ]
+}

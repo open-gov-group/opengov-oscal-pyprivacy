@@ -1,0 +1,24 @@
+{
+  "list_id": "data-categories",
+  "version": "2.0.0",
+  "namespace_uri": "urn:opengov:codelist:data-categories",
+  "title": {"en": "Data Categories", "de": "Datenkategorien"},
+  "source": "XÖV-VVT v2.0.0",
+  "entries": [
+    {"code": "master-data", "labels": {"en": "Master data / Identity data", "de": "Stammdaten"}, "xoev_code": "stammdaten", "metadata": {"group": "general"}, "sort_order": 1},
+    {"code": "contact-data", "labels": {"en": "Contact data", "de": "Kontaktdaten"}, "xoev_code": "kontaktdaten", "metadata": {"group": "general"}, "sort_order": 2},
+    {"code": "address-data", "labels": {"en": "Address data", "de": "Adressdaten"}, "xoev_code": "adressdaten", "metadata": {"group": "general"}, "sort_order": 3},
+    {"code": "financial-data", "labels": {"en": "Financial data", "de": "Finanzdaten"}, "xoev_code": "finanzdaten", "metadata": {"group": "general"}, "sort_order": 4},
+    {"code": "employment-data", "labels": {"en": "Employment data", "de": "Beschäftigungsdaten"}, "xoev_code": "beschaeftigung", "metadata": {"group": "general"}, "sort_order": 5},
+    {"code": "health-data", "labels": {"en": "Health data", "de": "Gesundheitsdaten"}, "xoev_code": "gesundheit", "metadata": {"group": "special", "gdpr_article": "Art. 9"}, "sort_order": 6},
+    {"code": "biometric-data", "labels": {"en": "Biometric data for identification", "de": "Biometrische Daten"}, "xoev_code": "biometrisch", "metadata": {"group": "special", "gdpr_article": "Art. 9"}, "sort_order": 7},
+    {"code": "genetic-data", "labels": {"en": "Genetic data", "de": "Genetische Daten"}, "xoev_code": "genetisch", "metadata": {"group": "special", "gdpr_article": "Art. 9"}, "sort_order": 8},
+    {"code": "racial-ethnic", "labels": {"en": "Racial or ethnic origin", "de": "Rassische oder ethnische Herkunft"}, "xoev_code": "ethnie", "metadata": {"group": "special", "gdpr_article": "Art. 9"}, "sort_order": 9},
+    {"code": "political-opinions", "labels": {"en": "Political opinions", "de": "Politische Meinungen"}, "xoev_code": "politik", "metadata": {"group": "special", "gdpr_article": "Art. 9"}, "sort_order": 10},
+    {"code": "religious-beliefs", "labels": {"en": "Religious or philosophical beliefs", "de": "Religiöse oder weltanschauliche Überzeugungen"}, "xoev_code": "religion", "metadata": {"group": "special", "gdpr_article": "Art. 9"}, "sort_order": 11},
+    {"code": "trade-union", "labels": {"en": "Trade union membership", "de": "Gewerkschaftszugehörigkeit"}, "xoev_code": "gewerkschaft", "metadata": {"group": "special", "gdpr_article": "Art. 9"}, "sort_order": 12},
+    {"code": "sexual-orientation", "labels": {"en": "Sexual orientation", "de": "Sexualleben oder sexuelle Orientierung"}, "xoev_code": "sexualleben", "metadata": {"group": "special", "gdpr_article": "Art. 9"}, "sort_order": 13},
+    {"code": "criminal-data", "labels": {"en": "Criminal convictions and offences", "de": "Strafdaten"}, "xoev_code": "straftaten", "metadata": {"group": "criminal", "gdpr_article": "Art. 10"}, "sort_order": 14},
+    {"code": "location-data", "labels": {"en": "Location data", "de": "Standortdaten"}, "xoev_code": "standort", "metadata": {"group": "general"}, "sort_order": 15}
+  ]
+}

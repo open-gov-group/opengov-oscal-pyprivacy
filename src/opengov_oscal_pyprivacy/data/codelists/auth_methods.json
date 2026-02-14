@@ -1,0 +1,17 @@
+{
+  "list_id": "auth-methods",
+  "version": "2.0.0",
+  "namespace_uri": "urn:opengov:codelist:auth-methods",
+  "title": {"en": "Authentication Methods", "de": "Authentifizierungsmethoden"},
+  "source": "XÖV-VVT v2.0.0",
+  "entries": [
+    {"code": "password", "labels": {"en": "Password-based authentication", "de": "Passwortbasierte Authentifizierung"}, "xoev_code": "passwort", "metadata": {"group": "basic"}, "sort_order": 1},
+    {"code": "mfa", "labels": {"en": "Multi-factor authentication (MFA)", "de": "Multi-Faktor-Authentifizierung (MFA)"}, "xoev_code": "mfa", "metadata": {"group": "strong"}, "sort_order": 2},
+    {"code": "sso", "labels": {"en": "Single Sign-On (SSO)", "de": "Single Sign-On (SSO)"}, "xoev_code": "sso", "metadata": {"group": "federated"}, "sort_order": 3},
+    {"code": "certificate", "labels": {"en": "Certificate-based authentication", "de": "Zertifikatsbasierte Authentifizierung"}, "xoev_code": "zertifikat", "metadata": {"group": "strong"}, "sort_order": 4},
+    {"code": "biometric-auth", "labels": {"en": "Biometric authentication", "de": "Biometrische Authentifizierung"}, "xoev_code": "biometrisch", "metadata": {"group": "strong"}, "sort_order": 5},
+    {"code": "smartcard", "labels": {"en": "Smartcard authentication", "de": "Smartcard-Authentifizierung"}, "xoev_code": "smartcard", "metadata": {"group": "strong"}, "sort_order": 6},
+    {"code": "oauth2", "labels": {"en": "OAuth 2.0 authorization", "de": "OAuth 2.0 Autorisierung"}, "xoev_code": "oauth2", "metadata": {"group": "federated"}, "sort_order": 7},
+    {"code": "ldap", "labels": {"en": "LDAP directory authentication", "de": "LDAP-Verzeichnisauthentifizierung"}, "xoev_code": "ldap", "metadata": {"group": "directory"}, "sort_order": 8}
+  ]
+}

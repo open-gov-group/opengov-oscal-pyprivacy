@@ -1,0 +1,12 @@
+{
+  "list_id": "measure-types",
+  "version": "1.0.0",
+  "namespace_uri": "urn:opengov:codelist:measure-types",
+  "title": {"en": "Measure Types", "de": "Maßnahmentypen"},
+  "entries": [
+    {"code": "organizational", "labels": {"en": "Organizational", "de": "Organisatorisch"}, "sort_order": 1},
+    {"code": "technical", "labels": {"en": "Technical", "de": "Technisch"}, "sort_order": 2},
+    {"code": "physical", "labels": {"en": "Physical", "de": "Physisch"}, "sort_order": 3},
+    {"code": "personnel", "labels": {"en": "Personnel", "de": "Personal"}, "sort_order": 4}
+  ]
+}

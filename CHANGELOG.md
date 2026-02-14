@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.8.0] - 2026-02-14
+
+Phase 1.5: Standardisierte Codelisten-Engine — Pydantic v2 Models, CodelistRegistry, XÖV-VVT Import, i18n, Cascade Engine, OSCAL Integration.
+
+### Added
+
+- Codelist Models: `Codelist`, `CodeEntry`, `CodeLabel`, `CascadeRule`, `CascadeEffect`, `CodeEntryMetadata` with strict validation (`extra="forbid"`) (#33)
+- `CodelistRegistry` with JSON Loader: `load_defaults()`, `validate_code()`, `get_label()`, `search()`, `list_codes()` (#34)
+- CSV → JSON Migration: 6 bestehende Vocabularies (assurance-goals, measure-types, evidence-types, maturity-domains, maturity-levels, mapping-schemes) als JSON (#34)
+- XÖV-VVT Import: 12 Listen (data-categories, data-subjects, recipients, legal-instruments, crypto-methods, auth-methods, availability-classes, storage-locations, protocols, operating-models, data-flow-directions, document-types) + protection-levels (#35)
+- i18n: `TranslationOverlay` mit EN/DE inline + FR Overlay-Dateien, Fallback-Chain (#36)
+- Genericode Export: `export_genericode()` für XÖV-Kompatibilität (Roundtrip) (#37)
+- Cascade Engine: `CascadeService` mit `evaluate_impact()`, `suggest_changes()`, 3 Regel-Sets (#38)
+- OSCAL Integration: `validate_codelist_props()`, `create_codelist_prop()`, `extract_codelist_codes()` (#39)
+
+### Quality Gate (#40)
+
+- 423 tests, 97% coverage (up from 295 tests / 97%)
+- New: codelist/ subpackage with models, registry, loader, i18n, cascade, export/
+- 19 JSON codelist files, 3 cascade rule sets, FR overlay
+- Python 3.10-3.14 compatible
+
 ## [0.7.0] - 2026-02-12
 
 Phase 4: ROPA + DPIA Domains — Extract functions, DTOs, Converters, Query helpers.

@@ -1,0 +1,15 @@
+{
+  "list_id": "storage-locations",
+  "version": "2.0.0",
+  "namespace_uri": "urn:opengov:codelist:storage-locations",
+  "title": {"en": "Storage Locations", "de": "Speicherorte"},
+  "source": "XÖV-VVT v2.0.0",
+  "entries": [
+    {"code": "on-premises", "labels": {"en": "On-premises data center", "de": "Eigenes Rechenzentrum"}, "xoev_code": "lokal", "metadata": {"group": "local"}, "sort_order": 1},
+    {"code": "private-cloud", "labels": {"en": "Private cloud", "de": "Private Cloud"}, "xoev_code": "private_cloud", "metadata": {"group": "cloud"}, "sort_order": 2},
+    {"code": "public-cloud-eu", "labels": {"en": "Public cloud (EU/EEA)", "de": "Public Cloud (EU/EWR)"}, "xoev_code": "public_cloud_eu", "metadata": {"group": "cloud", "gdpr_article": "Art. 44-49"}, "sort_order": 3},
+    {"code": "public-cloud-non-eu", "labels": {"en": "Public cloud (non-EU)", "de": "Public Cloud (Drittland)"}, "xoev_code": "public_cloud_drittland", "metadata": {"group": "cloud", "gdpr_article": "Art. 44-49"}, "sort_order": 4},
+    {"code": "hybrid-cloud", "labels": {"en": "Hybrid cloud", "de": "Hybrid Cloud"}, "xoev_code": "hybrid_cloud", "metadata": {"group": "cloud"}, "sort_order": 5},
+    {"code": "local-device", "labels": {"en": "Local device / endpoint", "de": "Lokales Endgerät"}, "xoev_code": "endgeraet", "metadata": {"group": "local"}, "sort_order": 6}
+  ]
+}
