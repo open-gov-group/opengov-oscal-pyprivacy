@@ -1,6 +1,6 @@
-from .sdm_converter import control_to_sdm_summary, control_to_sdm_detail
+from .sdm_converter import control_to_sdm_summary, control_to_sdm_detail, group_to_sdm_summary, group_to_sdm_detail
 from .sdm_tom_converter import control_to_sdm_tom_summary, control_to_sdm_tom_detail
-from .resilience_converter import control_to_security_control
+from .resilience_converter import control_to_security_control, group_to_resilience_summary, group_to_resilience_detail
 from .privacy_converter import (
     control_to_privacy_summary,
     control_to_privacy_detail,
@@ -23,9 +23,13 @@ from .dpia_converter import (
 __all__ = [
     "control_to_sdm_summary",
     "control_to_sdm_detail",
+    "group_to_sdm_summary",
+    "group_to_sdm_detail",
     "control_to_sdm_tom_summary",
     "control_to_sdm_tom_detail",
     "control_to_security_control",
+    "group_to_resilience_summary",
+    "group_to_resilience_detail",
     "control_to_privacy_summary",
     "control_to_privacy_detail",
     "group_to_privacy_summary",

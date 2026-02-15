@@ -1,5 +1,36 @@
 # Changelog
 
+## [1.0.0] - 2026-02-14
+
+API-Freeze Release: Typed Parameters, JSON-Schema Validation, Group Converters, Export Helpers, Performance Tests.
+
+### Added
+
+- Models: `Parameter` typed model replaces `Dict[str, Any]` in `Control.params` (#49)
+- CRUD: `list_params`, `find_params`, `get_param`, `upsert_param`, `remove_param` in `crud/params.py` (#49)
+- Validation: `validate_against_oscal_schema()`, `SchemaValidationResult`, `SchemaValidationIssue` for OSCAL JSON-Schema validation (#50)
+- Export: `to_json()`, `to_dict()` convenience helpers in `pycore/export.py` (#55)
+- Converter: `group_to_sdm_summary`, `group_to_sdm_detail` for SDM group-level conversion (#52)
+- Converter: `group_to_resilience_summary`, `group_to_resilience_detail` for Resilience group-level conversion (#52)
+- DTOs: `SdmGroupSummary`, `SdmGroupDetail` in `dto/sdm.py` (#52)
+- DTOs: `ResilienceGroupSummary`, `ResilienceGroupDetail` in `dto/resilience.py` (#52)
+- Codelist: `import_genericode()` for Genericode XML import (roundtrip with `export_genericode`) (#54)
+- Performance: Synthetic catalog generator + 7 benchmark tests with `pytest-benchmark` (#51)
+- Docs: `API.md` function reference for all public APIs (#56)
+
+### Changed
+
+- **BREAKING**: `Control.params` changed from `List[Dict[str, Any]]` to `List[Parameter]` (#49)
+- `vocab.py` rewritten as deprecation wrapper delegating to `CodelistRegistry` (#53)
+- `pytest-benchmark>=4.0` added as dev dependency (#51)
+
+### Quality Gate (#57)
+
+- 651 tests, 97% coverage (up from 559 tests / 97%)
+- All public APIs frozen and documented in API.md
+- New test files: test_params, test_export, test_schema_validation, test_codelist_genericode_roundtrip, test_performance
+- Python 3.10-3.14 compatible
+
 ## [0.9.0] - 2026-02-14
 
 Phase 5: OSCAL Architecture Models — Profile, SSP, ComponentDefinition, Mapping Domain, DiffService.

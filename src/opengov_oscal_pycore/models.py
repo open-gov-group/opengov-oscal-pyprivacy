@@ -48,6 +48,19 @@ class Part(OscalBaseModel):
     parts: List[Part] = Field(default_factory=list)
 
 
+class Parameter(OscalBaseModel):
+    id: str
+    label: Optional[str] = None
+    class_: Optional[str] = Field(default=None, alias="class")
+    usage: Optional[str] = None
+    values: List[str] = Field(default_factory=list)
+    select: Optional[Dict[str, Any]] = None
+    constraints: List[Dict[str, Any]] = Field(default_factory=list)
+    guidelines: List[Dict[str, Any]] = Field(default_factory=list)
+    props: List[Property] = Field(default_factory=list)
+    links: List[Link] = Field(default_factory=list)
+
+
 class Control(OscalBaseModel):
     id: str
     class_: Optional[str] = Field(default=None, alias="class")
@@ -55,7 +68,7 @@ class Control(OscalBaseModel):
     props: List[Property] = Field(default_factory=list)
     parts: List[Part] = Field(default_factory=list)
     links: List[Link] = Field(default_factory=list)
-    params: List[Dict[str, Any]] = Field(default_factory=list)
+    params: List[Parameter] = Field(default_factory=list)
     controls: List[Control] = Field(default_factory=list)
 
 

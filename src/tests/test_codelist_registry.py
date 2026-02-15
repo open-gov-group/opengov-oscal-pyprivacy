@@ -236,19 +236,25 @@ class TestBackwardCompat:
     """Ensure old vocab API still works alongside the new registry."""
 
     def test_existing_vocab_still_works(self) -> None:
-        """load_default_privacy_vocabs() still loads CSV-based vocabs."""
+        """load_default_privacy_vocabs() still loads vocabs (via codelist)."""
+        import warnings
         from opengov_oscal_pyprivacy.vocab import load_default_privacy_vocabs, PrivacyVocabs
 
-        vocabs = load_default_privacy_vocabs()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            vocabs = load_default_privacy_vocabs()
         assert isinstance(vocabs, PrivacyVocabs)
         assert len(vocabs.assurance_goals.keys) > 0
         assert "transparency" in vocabs.assurance_goals.keys
 
     def test_registry_covers_vocab_keys(self) -> None:
         """Registry assurance-goals codes are a superset of the old vocab keys."""
+        import warnings
         from opengov_oscal_pyprivacy.vocab import load_default_privacy_vocabs
 
-        vocabs = load_default_privacy_vocabs()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            vocabs = load_default_privacy_vocabs()
         old_keys = vocabs.assurance_goals.keys
 
         registry = CodelistRegistry.load_defaults()

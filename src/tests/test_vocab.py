@@ -2,10 +2,14 @@
 Tests for opengov_oscal_pyprivacy.vocab — privacy vocabulary loading.
 """
 
+import warnings
+from pathlib import Path
+
 import pytest
 
 from opengov_oscal_pyprivacy.vocab import (
     load_default_privacy_vocabs,
+    load_privacy_vocabs,
     PrivacyVocabs,
     Vocab,
 )
@@ -14,7 +18,9 @@ from opengov_oscal_pyprivacy.vocab import (
 @pytest.fixture(scope="module")
 def vocabs() -> PrivacyVocabs:
     """Load the default privacy vocabs once for all tests in this module."""
-    return load_default_privacy_vocabs()
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", DeprecationWarning)
+        return load_default_privacy_vocabs()
 
 
 # ---------------------------------------------------------------------------
@@ -153,3 +159,29 @@ class TestMappingSchemesVocab:
         """Spot-check known mapping schemes."""
         expected = {"sdm", "iso27001"}
         assert expected.issubset(vocabs.mapping_schemes.keys)
+
+
+# ---------------------------------------------------------------------------
+# Deprecation warnings
+# ---------------------------------------------------------------------------
+
+class TestDeprecationWarnings:
+    """Verify that deprecated functions emit DeprecationWarning."""
+
+    def test_load_default_emits_warning(self):
+        with pytest.warns(DeprecationWarning, match="deprecated"):
+            load_default_privacy_vocabs()
+
+    def test_load_privacy_vocabs_emits_warning(self):
+        with pytest.warns(DeprecationWarning, match="deprecated"):
+            load_privacy_vocabs(Path("dummy"))
+
+    def test_codelist_registry_equivalent(self, vocabs: PrivacyVocabs):
+        """Verify CodelistRegistry provides same data as PrivacyVocabs."""
+        from opengov_oscal_pyprivacy.codelist import CodelistRegistry
+
+        registry = CodelistRegistry.load_defaults()
+        # assurance_goals keys should match
+        cl = registry.get_list("assurance-goals")
+        cl_keys = {e.code for e in cl.entries if not e.deprecated}
+        assert vocabs.assurance_goals.keys == cl_keys

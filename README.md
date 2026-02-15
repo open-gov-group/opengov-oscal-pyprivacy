@@ -2,7 +2,7 @@
 
 Lightweight Python toolkit for OSCAL privacy catalogs and privacy/SDM-specific conventions.
 
-**Version:** 0.9.0 | **Python:** >=3.10 | **License:** GPL-3.0-only
+**Version:** 1.0.0 | **Python:** >=3.10 | **License:** GPL-3.0-only
 
 ## Packages
 
@@ -22,7 +22,10 @@ Minimal OSCAL subset models + generic CRUD utilities.
 | `crud/links.py` | Link CRUD: `list_links`, `find_links`, `get_link`, `upsert_link`, `remove_links` |
 | `crud/back_matter.py` | BackMatter CRUD: `find_resource`, `add_resource`, `remove_resource` |
 | `crud_catalog.py` | Catalog-level CRUD + query: `find_control`, `find_group`, `add_group`, `delete_group`, `move_control`, ... |
+| `crud/params.py` | Parameter CRUD: `list_params`, `find_params`, `get_param`, `upsert_param`, `remove_param` |
 | `validation.py` | Catalog validation: `validate_catalog`, `validate_metadata`, `validate_unique_ids` |
+| `schema_validation.py` | OSCAL JSON-Schema validation: `validate_against_oscal_schema()` |
+| `export.py` | Export helpers: `to_json()`, `to_dict()` for OSCAL documents |
 | `repo.py` | File-based I/O: `OscalRepository[T]` with `load()` / `save()` |
 
 ### opengov_oscal_pyprivacy
@@ -36,7 +39,7 @@ Privacy/SDM helpers, domain modules, CSV-backed vocabularies, and DTOs.
 | `domain/sdm_catalog.py` | SDM-specific property extraction/mutation (13 functions) |
 | `domain/resilience_catalog.py` | Resilience catalog domain (domain/objective/description) |
 | `dto/` | Pydantic DTOs for API integration (Privacy, SDM, SDM-TOM, Resilience, Mapping) |
-| `vocab.py` | CSV-backed vocabulary loading (assurance goals, measures, maturity, ...) |
+| `vocab.py` | Vocabulary loading (deprecated, delegates to CodelistRegistry) |
 | `legal_adapter.py` | Legal reference normalization (integrates with opengov-pylegal-utils) |
 | `domain/query.py` | Query helpers: `find_controls_by_tom_id`, `find_controls_by_legal_article` |
 | `domain/profile.py` | Profile operations: `resolve_profile_imports()`, `build_profile_from_controls()` |
@@ -52,7 +55,7 @@ Privacy/SDM helpers, domain modules, CSV-backed vocabularies, and DTOs.
 | `codelist/registry.py` | CodelistRegistry: central registry with validate, search, load_defaults |
 | `codelist/i18n.py` | TranslationOverlay: multilingual label resolution (EN/DE/FR) |
 | `codelist/cascade.py` | CascadeService: cascading compliance impacts on data category changes |
-| `codelist/export/` | Genericode 1.0 XML export + OSCAL Props integration |
+| `codelist/export/` | Genericode 1.0 XML export/import (roundtrip) + OSCAL Props integration |
 
 ## Installation
 
@@ -234,6 +237,38 @@ result = svc.diff_catalogs(old_catalog, new_catalog)
 print(svc.format_diff_summary(result))
 ```
 
+### Typed Parameters + CRUD (v1.0.0)
+
+```python
+from opengov_oscal_pycore import Parameter, upsert_param, get_param_value
+
+# Parameters are now typed models (not dicts)
+param = control.params[0]
+print(param.id, param.label, param.values)
+
+# CRUD
+upsert_param(control, Parameter(id="freq", label="Frequency", values=["quarterly"]))
+val = get_param_value(control, "freq")  # Parameter object
+```
+
+### Export Helpers (v1.0.0)
+
+```python
+from opengov_oscal_pycore import to_json, to_dict
+
+json_str = to_json(catalog)           # OSCAL-compliant JSON string
+data = to_dict(catalog)               # dict with by_alias=True
+```
+
+### JSON-Schema Validation (v1.0.0)
+
+```python
+from opengov_oscal_pycore import validate_against_oscal_schema
+
+result = validate_against_oscal_schema(data, "catalog")
+print(result.valid, len(result.issues))
+```
+
 ### Cascade Compliance (v0.8.0)
 
 ```python
@@ -258,7 +293,7 @@ scenarios = get_risk_impact_scenarios(control)
 ## Development
 
 ```bash
-pytest                    # run tests (559 tests)
+pytest                    # run tests (651 tests)
 pytest --tb=short -v      # verbose
 coverage run -m pytest    # with coverage (97%)
 ```

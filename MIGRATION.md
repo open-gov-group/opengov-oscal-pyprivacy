@@ -1,4 +1,4 @@
-# Migration Guide: pyprivacy v0.3.0 -> v0.9.0
+# Migration Guide: pyprivacy v0.3.0 -> v1.0.0
 
 ## 1. Update Dependency
 
@@ -491,3 +491,100 @@ pip install opengov-oscal-pyprivacy[diff]  # install with deepdiff support
 ```
 
 Without deepdiff, the diff falls back to a simple recursive dict comparison.
+
+## 16. Typed Parameters (v1.0.0) — BREAKING CHANGE
+
+`Control.params` changed from `List[Dict[str, Any]]` to `List[Parameter]`.
+
+### Before (v0.9.0)
+
+```python
+control.params  # List[Dict[str, Any]]
+param = control.params[0]  # dict
+param["id"]
+param.get("label", "")
+```
+
+### After (v1.0.0)
+
+```python
+from opengov_oscal_pycore import Parameter
+
+control.params  # List[Parameter]
+param = control.params[0]  # Parameter object
+param.id
+param.label or ""
+param.values       # List[str]
+param.constraints  # List[Dict[str, Any]]
+```
+
+### Parameter CRUD
+
+```python
+from opengov_oscal_pycore import list_params, find_params, get_param_value, upsert_param, remove_param
+
+all_params = list_params(control)
+matching = find_params(control, id="freq")
+param = get_param_value(control, "freq")
+upsert_param(control, Parameter(id="freq", label="Frequency", values=["quarterly"]))
+remove_param(control, "freq")
+```
+
+## 17. Export Helpers (v1.0.0)
+
+```python
+from opengov_oscal_pycore import to_json, to_dict
+
+# OSCAL-compliant JSON with aliases (e.g. "last-modified", "back-matter")
+json_str = to_json(catalog)
+json_str = to_json(catalog, indent=2)  # pretty-printed
+
+# Dict with by_alias=True
+data = to_dict(catalog)
+```
+
+## 18. JSON-Schema Validation (v1.0.0)
+
+```python
+from opengov_oscal_pycore import validate_against_oscal_schema
+
+result = validate_against_oscal_schema(data, "catalog")
+if not result.valid:
+    for issue in result.issues:
+        print(f"[{issue.severity}] {issue.path}: {issue.message}")
+```
+
+Supported types: `catalog`, `profile`, `component-definition`, `system-security-plan`.
+
+## 19. PrivacyVocabs Deprecation (v1.0.0)
+
+`load_default_privacy_vocabs()` and `PrivacyVocabs` are deprecated. Use `CodelistRegistry` instead.
+
+### Before (v0.8.0)
+
+```python
+from opengov_oscal_pyprivacy.vocab import load_default_privacy_vocabs
+vocabs = load_default_privacy_vocabs()
+vocabs.assurance_goals  # set of strings
+```
+
+### After (v1.0.0)
+
+```python
+from opengov_oscal_pyprivacy.codelist import CodelistRegistry
+registry = CodelistRegistry.load_defaults()
+registry.list_codes("assurance-goals")  # list of CodeEntry
+registry.validate_code("assurance-goals", "transparency")  # True
+```
+
+## 20. Genericode Roundtrip (v1.0.0)
+
+```python
+from opengov_oscal_pyprivacy.codelist import export_genericode, import_genericode
+
+# Export to XML
+xml_str = export_genericode(codelist)
+
+# Import back from XML
+codelist = import_genericode(xml_str)
+```

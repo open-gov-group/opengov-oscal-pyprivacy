@@ -8,11 +8,12 @@ Compose domain extract functions into SDM DTOs.
 
 from typing import Optional
 
-from opengov_oscal_pycore.models import Control
+from opengov_oscal_pycore.models import Control, Group
 
 from ..dto.sdm import (
     SdmControlSummary, SdmControlSummaryProps,
     SdmControlDetail, SdmControlDetailProps,
+    SdmGroupSummary, SdmGroupDetail,
 )
 from ..domain.sdm_catalog import (
     extract_sdm_module, extract_sdm_goals, extract_dsgvo_articles,
@@ -57,4 +58,26 @@ def control_to_sdm_detail(
             dp_risk_impact=extract_dp_risk_impact(control),
             related_mappings=extract_related_mappings(control),
         ),
+    )
+
+
+def group_to_sdm_summary(group: Group) -> SdmGroupSummary:
+    """Convert a Group to an SdmGroupSummary DTO."""
+    return SdmGroupSummary(
+        id=group.id,
+        title=group.title or "",
+        control_count=len(group.controls),
+    )
+
+
+def group_to_sdm_detail(group: Group) -> SdmGroupDetail:
+    """Convert a Group to an SdmGroupDetail DTO with all controls."""
+    return SdmGroupDetail(
+        id=group.id,
+        title=group.title or "",
+        control_count=len(group.controls),
+        controls=[
+            control_to_sdm_detail(ctrl, group_id=group.id)
+            for ctrl in group.controls
+        ],
     )

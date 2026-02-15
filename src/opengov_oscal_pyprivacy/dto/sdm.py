@@ -35,3 +35,13 @@ class SdmControlUpdateProps(DtoBaseModel):
 
 class SdmControlUpdateRequest(DtoBaseModel):
     props: SdmControlUpdateProps
+
+
+class SdmGroupSummary(DtoBaseModel):
+    id: str
+    title: str
+    control_count: int = Field(default=0, alias="controlCount")
+
+
+class SdmGroupDetail(SdmGroupSummary):
+    controls: List[SdmControlDetail] = Field(default_factory=list)

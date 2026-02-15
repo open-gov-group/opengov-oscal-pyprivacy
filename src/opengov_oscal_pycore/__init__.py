@@ -15,7 +15,7 @@ Scope (intentionally small):
 
 # Models
 from .models import (
-    Catalog, Group, Control, Property, Link, Part,
+    Catalog, Group, Control, Property, Link, Part, Parameter,
     OscalMetadata, Role, Party,
     BackMatter, Resource, Rlink,
 )
@@ -66,6 +66,9 @@ from .crud.parts import (
 # Generic CRUD (links)
 from .crud.links import list_links, find_links, get_link, upsert_link, remove_links
 
+# Generic CRUD (params)
+from .crud.params import list_params, find_params, get_param as get_param_value, upsert_param, remove_param
+
 # Generic CRUD (back-matter)
 from .crud.back_matter import find_resource, add_resource, remove_resource
 
@@ -81,6 +84,13 @@ from .validation import (
     validate_control,
 )
 
+# Schema validation (against official OSCAL JSON Schemas)
+from .schema_validation import (
+    validate_against_oscal_schema,
+    SchemaValidationResult,
+    SchemaValidationIssue,
+)
+
 # Diff
 from .diff import (
     DiffChange,
@@ -91,9 +101,12 @@ from .diff import (
     diff_controls,
 )
 
+# Export helpers
+from .export import to_dict, to_json
+
 __all__ = [
     # Models
-    "Catalog", "Group", "Control", "Property", "Link", "Part",
+    "Catalog", "Group", "Control", "Property", "Link", "Part", "Parameter",
     "OscalMetadata", "Role", "Party",
     "BackMatter", "Resource", "Rlink",
     # Component Definition Models
@@ -118,6 +131,8 @@ __all__ = [
     "list_child_parts", "add_child_part", "update_child_part", "delete_child_part",
     # Links CRUD
     "list_links", "find_links", "get_link", "upsert_link", "remove_links",
+    # Params CRUD
+    "list_params", "find_params", "get_param_value", "upsert_param", "remove_param",
     # Back-matter CRUD
     "find_resource", "add_resource", "remove_resource",
     # Versioning
@@ -125,7 +140,11 @@ __all__ = [
     # Validation
     "ValidationIssue", "validate_catalog", "validate_metadata",
     "validate_unique_ids", "validate_control",
+    # Schema validation
+    "validate_against_oscal_schema", "SchemaValidationResult", "SchemaValidationIssue",
     # Diff
     "DiffChange", "DiffSummary", "OscalDiffResult",
     "diff_oscal", "diff_catalogs", "diff_controls",
+    # Export helpers
+    "to_dict", "to_json",
 ]

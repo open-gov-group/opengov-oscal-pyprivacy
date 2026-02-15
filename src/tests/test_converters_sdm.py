@@ -1,20 +1,36 @@
-"""Tests for the SDM catalog converter (#15)."""
+"""Tests for the SDM catalog converter (#15) and group-level converters (#52)."""
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 import pytest
 
-from opengov_oscal_pycore.models import Control, Property
+from opengov_oscal_pycore.models import Control, Group, Property
 
 from opengov_oscal_pyprivacy.converters.sdm_converter import (
     control_to_sdm_summary,
     control_to_sdm_detail,
+    group_to_sdm_summary,
+    group_to_sdm_detail,
+)
+from opengov_oscal_pyprivacy.converters.resilience_converter import (
+    group_to_resilience_summary,
+    group_to_resilience_detail,
 )
 from opengov_oscal_pyprivacy.dto.sdm import (
     SdmControlSummary,
     SdmControlSummaryProps,
     SdmControlDetail,
     SdmControlDetailProps,
+    SdmGroupSummary,
+    SdmGroupDetail,
+)
+from opengov_oscal_pyprivacy.dto.resilience import (
+    ResilienceGroupSummary,
+    ResilienceGroupDetail,
+    SecurityControl,
 )
 
 
@@ -186,3 +202,121 @@ class TestSdmSummarySerialization:
         assert props["sdmModule"] == "Datenminimierung"
         assert props["sdmGoals"] == ["Vertraulichkeit", "Integritaet"]
         assert props["dsgvoArticles"] == ["Art. 25 DSGVO", "Art. 32 DSGVO"]
+
+
+# ---------------------------------------------------------------------------
+# Fixture: Group from test catalog
+# ---------------------------------------------------------------------------
+
+FIXTURE = Path(__file__).parent / "data" / "open_privacy_catalog_risk.json"
+
+
+@pytest.fixture
+def gov_group() -> Group:
+    """Load the GOV group from the test fixture."""
+    raw = json.loads(FIXTURE.read_text(encoding="utf-8"))
+    catalog = raw.get("catalog", raw)
+    grp_data = catalog["groups"][0]
+    return Group(**grp_data)
+
+
+@pytest.fixture
+def empty_group() -> Group:
+    """A Group with no controls."""
+    return Group(id="EMPTY-GRP", title="Empty Group")
+
+
+# ---------------------------------------------------------------------------
+# SDM Group Summary tests (#52)
+# ---------------------------------------------------------------------------
+
+class TestGroupToSdmSummary:
+
+    def test_group_to_sdm_summary_returns_correct_type(self, gov_group: Group):
+        """group_to_sdm_summary returns an SdmGroupSummary instance."""
+        result = group_to_sdm_summary(gov_group)
+        assert isinstance(result, SdmGroupSummary)
+
+    def test_group_to_sdm_summary_fields(self, gov_group: Group):
+        """SdmGroupSummary has correct id, title, and control_count."""
+        result = group_to_sdm_summary(gov_group)
+        assert result.id == "GOV"
+        assert result.title == "GOV \u2013 Governance & Organisation"
+        assert result.control_count == 6
+
+    def test_group_to_sdm_summary_empty_group(self, empty_group: Group):
+        """Empty group produces a summary with control_count 0."""
+        result = group_to_sdm_summary(empty_group)
+        assert result.id == "EMPTY-GRP"
+        assert result.title == "Empty Group"
+        assert result.control_count == 0
+
+
+# ---------------------------------------------------------------------------
+# SDM Group Detail tests (#52)
+# ---------------------------------------------------------------------------
+
+class TestGroupToSdmDetail:
+
+    def test_group_to_sdm_detail_returns_correct_type(self, gov_group: Group):
+        """group_to_sdm_detail returns an SdmGroupDetail instance."""
+        result = group_to_sdm_detail(gov_group)
+        assert isinstance(result, SdmGroupDetail)
+
+    def test_group_to_sdm_detail_controls_populated(self, gov_group: Group):
+        """SdmGroupDetail.controls is populated with SdmControlDetail objects."""
+        result = group_to_sdm_detail(gov_group)
+        assert result.control_count == 6
+        assert len(result.controls) == 6
+        for ctrl in result.controls:
+            assert isinstance(ctrl, SdmControlDetail)
+
+    def test_group_to_sdm_detail_control_group_id(self, gov_group: Group):
+        """Each control in the detail DTO has group_id set to the group's id."""
+        result = group_to_sdm_detail(gov_group)
+        for ctrl in result.controls:
+            assert ctrl.group_id == "GOV"
+
+    def test_group_to_sdm_detail_alias_serialization(self, gov_group: Group):
+        """model_dump(by_alias=True) produces camelCase controlCount key."""
+        result = group_to_sdm_detail(gov_group)
+        data = result.model_dump(by_alias=True)
+        assert "controlCount" in data
+        assert data["controlCount"] == 6
+        assert "controls" in data
+        assert len(data["controls"]) == 6
+
+
+# ---------------------------------------------------------------------------
+# Resilience Group Converter tests (#52)
+# ---------------------------------------------------------------------------
+
+class TestGroupToResilienceSummary:
+
+    def test_group_to_resilience_summary_returns_correct_type(self, gov_group: Group):
+        """group_to_resilience_summary returns a ResilienceGroupSummary."""
+        result = group_to_resilience_summary(gov_group)
+        assert isinstance(result, ResilienceGroupSummary)
+
+    def test_group_to_resilience_summary_fields(self, gov_group: Group):
+        """ResilienceGroupSummary has correct id, title, control_count."""
+        result = group_to_resilience_summary(gov_group)
+        assert result.id == "GOV"
+        assert result.title == "GOV \u2013 Governance & Organisation"
+        assert result.control_count == 6
+
+
+class TestGroupToResilienceDetail:
+
+    def test_group_to_resilience_detail_returns_correct_type(self, gov_group: Group):
+        """group_to_resilience_detail returns a ResilienceGroupDetail."""
+        result = group_to_resilience_detail(gov_group)
+        assert isinstance(result, ResilienceGroupDetail)
+
+    def test_group_to_resilience_detail_controls_populated(self, gov_group: Group):
+        """ResilienceGroupDetail.controls is populated with SecurityControl objects."""
+        result = group_to_resilience_detail(gov_group)
+        assert result.control_count == 6
+        assert len(result.controls) == 6
+        for ctrl in result.controls:
+            assert isinstance(ctrl, SecurityControl)
